@@ -1,0 +1,503 @@
+/**
+ * report-styles.css
+ *
+ * Professional styling for CRE Acquisition report HTML/PDF exports.
+ * Designed for readability, print-friendliness, and clear data presentation.
+ */
+
+/* ----------------------------------------------------------------
+   Base & Typography
+   ---------------------------------------------------------------- */
+
+:root {
+  --color-text: #1a1a2e;
+  --color-text-light: #4a4a68;
+  --color-text-muted: #6e6e8a;
+  --color-border: #d1d5db;
+  --color-border-light: #e5e7eb;
+  --color-bg: #ffffff;
+  --color-bg-alt: #f9fafb;
+  --color-bg-header: #1a1a2e;
+  --color-accent: #2563eb;
+
+  --color-go: #059669;
+  --color-go-bg: #d1fae5;
+  --color-conditional: #d97706;
+  --color-conditional-bg: #fef3c7;
+  --color-nogo: #dc2626;
+  --color-nogo-bg: #fee2e2;
+
+  --color-risk-low: #059669;
+  --color-risk-medium: #d97706;
+  --color-risk-high: #ea580c;
+  --color-risk-critical: #dc2626;
+
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+
+  --max-width: 960px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+.report-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 2rem 2.5rem;
+}
+
+/* ----------------------------------------------------------------
+   Headings
+   ---------------------------------------------------------------- */
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--color-text);
+}
+
+h1 {
+  font-size: 1.75rem;
+  border-bottom: 2px solid var(--color-bg-header);
+  padding-bottom: 0.4em;
+  margin-top: 0;
+}
+
+h2 {
+  font-size: 1.35rem;
+  border-bottom: 1px solid var(--color-border-light);
+  padding-bottom: 0.3em;
+}
+
+h3 {
+  font-size: 1.1rem;
+  color: var(--color-text-light);
+}
+
+h4 {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* ----------------------------------------------------------------
+   Report Header
+   ---------------------------------------------------------------- */
+
+.report-header {
+  background: var(--color-bg-header);
+  color: #ffffff;
+  padding: 1.5rem 2rem;
+  margin: -2rem -2.5rem 2rem;
+  border-radius: 0;
+}
+
+.report-header h1 {
+  color: #ffffff;
+  border-bottom: none;
+  margin: 0 0 0.25rem;
+  font-size: 1.5rem;
+}
+
+.report-header .subtitle {
+  color: #a5b4c8;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.report-header .meta {
+  display: flex;
+  gap: 2rem;
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: #c5d0dc;
+}
+
+/* ----------------------------------------------------------------
+   Verdict Badge
+   ---------------------------------------------------------------- */
+
+.verdict-badge {
+  display: inline-block;
+  padding: 0.3em 1em;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.verdict-go {
+  background: var(--color-go-bg);
+  color: var(--color-go);
+  border: 1px solid var(--color-go);
+}
+
+.verdict-conditional {
+  background: var(--color-conditional-bg);
+  color: var(--color-conditional);
+  border: 1px solid var(--color-conditional);
+}
+
+.verdict-nogo {
+  background: var(--color-nogo-bg);
+  color: var(--color-nogo);
+  border: 1px solid var(--color-nogo);
+}
+
+/* ----------------------------------------------------------------
+   Tables
+   ---------------------------------------------------------------- */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0 1.5em;
+  font-size: 0.9rem;
+}
+
+thead th {
+  background: var(--color-bg-header);
+  color: #ffffff;
+  font-weight: 600;
+  text-align: left;
+  padding: 0.6em 0.8em;
+  border: 1px solid var(--color-bg-header);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+tbody td {
+  padding: 0.5em 0.8em;
+  border: 1px solid var(--color-border-light);
+  vertical-align: top;
+}
+
+tbody tr:nth-child(even) {
+  background: var(--color-bg-alt);
+}
+
+tbody tr:hover {
+  background: #eef2ff;
+}
+
+/* Metric status cells */
+td.status-pass,
+.status-pass {
+  color: var(--color-go);
+  font-weight: 600;
+}
+
+td.status-watch,
+.status-watch {
+  color: var(--color-conditional);
+  font-weight: 600;
+}
+
+td.status-fail,
+.status-fail {
+  color: var(--color-nogo);
+  font-weight: 600;
+}
+
+/* ----------------------------------------------------------------
+   Risk Level Color Coding
+   ---------------------------------------------------------------- */
+
+.risk-low {
+  color: var(--color-risk-low);
+  font-weight: 600;
+}
+
+.risk-medium {
+  color: var(--color-risk-medium);
+  font-weight: 600;
+}
+
+.risk-high {
+  color: var(--color-risk-high);
+  font-weight: 600;
+}
+
+.risk-critical {
+  color: var(--color-risk-critical);
+  font-weight: 700;
+}
+
+.risk-badge {
+  display: inline-block;
+  padding: 0.15em 0.5em;
+  border-radius: 3px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.risk-badge-low {
+  background: #d1fae5;
+  color: var(--color-risk-low);
+}
+
+.risk-badge-medium {
+  background: #fef3c7;
+  color: var(--color-risk-medium);
+}
+
+.risk-badge-high {
+  background: #ffedd5;
+  color: var(--color-risk-high);
+}
+
+.risk-badge-critical {
+  background: #fee2e2;
+  color: var(--color-risk-critical);
+}
+
+/* ----------------------------------------------------------------
+   Horizontal Rule / Section Dividers
+   ---------------------------------------------------------------- */
+
+hr {
+  border: none;
+  border-top: 1px solid var(--color-border-light);
+  margin: 2em 0;
+}
+
+/* ----------------------------------------------------------------
+   Code Blocks & JSON
+   ---------------------------------------------------------------- */
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--color-bg-alt);
+  padding: 0.15em 0.35em;
+  border-radius: 3px;
+  border: 1px solid var(--color-border-light);
+}
+
+pre {
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border-light);
+  border-radius: 4px;
+  padding: 1em 1.2em;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+pre code {
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+/* ----------------------------------------------------------------
+   Lists
+   ---------------------------------------------------------------- */
+
+ul, ol {
+  padding-left: 1.5em;
+  margin: 0.5em 0;
+}
+
+li {
+  margin-bottom: 0.3em;
+}
+
+/* ----------------------------------------------------------------
+   Strong / Bold emphasis
+   ---------------------------------------------------------------- */
+
+strong {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+/* ----------------------------------------------------------------
+   Key Metrics Summary Box
+   ---------------------------------------------------------------- */
+
+.metrics-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin: 1.5em 0;
+}
+
+.metric-card {
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border-light);
+  border-radius: 6px;
+  padding: 1em;
+  text-align: center;
+}
+
+.metric-card .label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  margin-bottom: 0.25em;
+}
+
+.metric-card .value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.metric-card .benchmark {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-top: 0.2em;
+}
+
+/* ----------------------------------------------------------------
+   Footer
+   ---------------------------------------------------------------- */
+
+.report-footer {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border-light);
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+/* ----------------------------------------------------------------
+   Print Styles
+   ---------------------------------------------------------------- */
+
+@media print {
+  body {
+    font-size: 11pt;
+    color: #000000;
+    background: #ffffff;
+  }
+
+  .report-container {
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  .report-header {
+    background: none;
+    color: #000000;
+    border-bottom: 2px solid #000000;
+    padding: 0 0 0.5rem;
+    margin: 0 0 1rem;
+  }
+
+  .report-header h1 {
+    color: #000000;
+  }
+
+  .report-header .subtitle,
+  .report-header .meta {
+    color: #333333;
+  }
+
+  /* Remove background colors for clean printing */
+  thead th {
+    background: none;
+    color: #000000;
+    border: 1px solid #000000;
+    font-weight: 700;
+  }
+
+  tbody tr:nth-child(even) {
+    background: none;
+  }
+
+  tbody td {
+    border: 1px solid #666666;
+  }
+
+  .verdict-badge {
+    border: 2px solid currentColor;
+    background: none;
+  }
+
+  .risk-badge {
+    background: none;
+    border: 1px solid currentColor;
+  }
+
+  .metric-card {
+    background: none;
+    border: 1px solid #999999;
+  }
+
+  code, pre {
+    background: none;
+    border: 1px solid #cccccc;
+  }
+
+  /* Page break controls */
+  h1, h2 {
+    page-break-after: avoid;
+  }
+
+  h3, h4 {
+    page-break-after: avoid;
+  }
+
+  table {
+    page-break-inside: avoid;
+  }
+
+  tr {
+    page-break-inside: avoid;
+  }
+
+  .page-break-before {
+    page-break-before: always;
+  }
+
+  .page-break-after {
+    page-break-after: always;
+  }
+
+  .no-print {
+    display: none;
+  }
+
+  /* Print margins */
+  @page {
+    margin: 1.5cm 2cm;
+    size: letter;
+  }
+
+  @page :first {
+    margin-top: 1cm;
+  }
+
+  /* Ensure links show URLs in print */
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #666666;
+  }
+}

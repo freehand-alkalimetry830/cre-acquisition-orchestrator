@@ -1,0 +1,48 @@
+{
+  "$description": "Expected output structure from Legal phase on test deal",
+  "phaseVerdict": "CONDITIONAL",
+  "confidence": 75,
+  "expectedAgentCount": 6,
+  "expectedAgents": [
+    "psa-reviewer",
+    "loan-doc-reviewer",
+    "title-survey-reviewer",
+    "estoppel-tracker",
+    "insurance-coordinator",
+    "transfer-doc-preparer"
+  ],
+  "expectedMetrics": {
+    "psaContingencies": { "min": 3, "max": 10, "unit": "count" },
+    "titleExceptions": { "min": 0, "max": 8, "unit": "count" },
+    "curativeItems": { "min": 0, "max": 5, "unit": "count" },
+    "estoppelsReceived": { "min": 150, "max": 200, "unit": "count" },
+    "estoppelResponseRate": { "min": 75, "max": 100, "unit": "percent" },
+    "estoppelDiscrepancies": { "min": 0, "max": 20, "unit": "count" },
+    "insuranceCoverageGaps": { "min": 0, "max": 3, "unit": "count" }
+  },
+  "estoppelBatching": {
+    "totalUnits": 200,
+    "batchSize": 50,
+    "expectedBatches": 4
+  },
+  "requiredOutputKeys": [
+    "phaseSummary",
+    "psaStatus",
+    "titleStatus",
+    "estoppelStatus",
+    "insuranceStatus",
+    "loanDocStatus",
+    "transferDocStatus",
+    "phaseVerdict",
+    "dataForDownstream"
+  ],
+  "requiredDataForDownstream": [
+    "psaApproved",
+    "titleClear",
+    "estoppelThresholdMet",
+    "insuranceConfirmed",
+    "loanDocsApproved",
+    "transferDocsReady",
+    "outstandingItems"
+  ]
+}

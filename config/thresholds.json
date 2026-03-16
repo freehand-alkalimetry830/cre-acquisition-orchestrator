@@ -1,0 +1,141 @@
+{
+  "$schema": "Investment Thresholds - Agents use these for go/no-go decisions",
+  "verdict": {
+    "PASS": "All primary criteria met, no dealbreakers",
+    "FAIL": "Any dealbreaker present OR multiple primary criteria fail",
+    "CONDITIONAL": "Marginal on some criteria but no dealbreakers"
+  },
+  "primaryCriteria": {
+    "dscr": { "pass": 1.25, "conditional": 1.0, "fail": 1.0, "description": "Debt Service Coverage Ratio" },
+    "capRateSpread": { "pass": 100, "conditional": 0, "fail": 0, "unit": "bps", "description": "Cap rate minus debt rate in basis points" },
+    "cashOnCash": { "pass": 0.08, "conditional": 0.05, "fail": 0.05, "description": "Annual cash flow / equity invested" },
+    "debtYield": { "pass": 0.09, "conditional": 0.07, "fail": 0.07, "description": "NOI / loan amount" },
+    "ltv": { "maxPass": 0.75, "maxConditional": 0.80, "fail": 0.80, "description": "Loan to value ratio" }
+  },
+  "secondaryCriteria": {
+    "occupancy": { "strong": 0.95, "acceptable": 0.90, "concern": 0.85, "distressed": 0.80 },
+    "expenseRatio": { "excellent": 0.40, "good": 0.45, "acceptable": 0.50, "concern": 0.55 },
+    "rentToMarket": { "upside": 0.90, "atMarket": 1.0, "aboveMarket": 1.05, "overpriced": 1.10 },
+    "capRate": { "strong": 0.07, "acceptable": 0.055, "marginal": 0.045, "fail": 0.04 },
+    "pricePerUnit": { "description": "Compared to market comps and replacement cost" }
+  },
+  "dealbreakers": [
+    "Active title dispute or lis pendens",
+    "Property in bankruptcy estate",
+    "Dissolved entity ownership",
+    "Active environmental contamination (unquantified)",
+    "Demolition order or condemnation",
+    "Criminal activity nexus",
+    "Fraud in title chain",
+    "DSCR below 0.80 without clear value-add thesis",
+    "Structural failure requiring demolition",
+    "Uninsurable property condition"
+  ],
+  "riskScore": {
+    "lowRisk": { "min": 90, "max": 100, "action": "Proceed with standard DD" },
+    "lowMediumRisk": { "min": 75, "max": 89, "action": "Proceed with enhanced DD" },
+    "mediumRisk": { "min": 60, "max": 74, "action": "Enhanced DD required, price adjustment likely" },
+    "mediumHighRisk": { "min": 40, "max": 59, "action": "Significant concerns, major discount required" },
+    "highRisk": { "min": 0, "max": 39, "action": "Not recommended" }
+  },
+  "strategyThresholds": {
+    "core": { "minDSCR": 1.30, "maxHighRisks": 0, "maxMediumRisks": 2, "minRiskScore": 85 },
+    "core-plus": { "minDSCR": 1.20, "maxHighRisks": 1, "maxMediumRisks": 3, "minRiskScore": 75 },
+    "value-add": { "minDSCR": 1.0, "maxHighRisks": 2, "maxMediumRisks": 5, "minRiskScore": 60 },
+    "opportunistic": { "minDSCR": 0.0, "maxHighRisks": 3, "maxMediumRisks": 10, "minRiskScore": 40 }
+  },
+  "dueDiligence": {
+    "maxRedFlags": 3,
+    "maxDataGaps": 5,
+    "criticalRedFlagCategories": [
+      "environmental-contamination",
+      "structural-failure",
+      "title-defect",
+      "zoning-violation",
+      "flood-zone-uninsurable"
+    ],
+    "minAgentsComplete": 5,
+    "minCriticalAgentsComplete": 4,
+    "criticalAgents": [
+      "rent-roll-analyst",
+      "opex-analyst",
+      "environmental-review",
+      "legal-title-review"
+    ],
+    "agentTimeouts": {
+      "default_minutes": 30,
+      "market-study_minutes": 45,
+      "environmental-review_minutes": 45
+    }
+  },
+  "underwriting": {
+    "minIRR": 0.15,
+    "minEquityMultiple": 1.8,
+    "minDSCR": 1.25,
+    "minCashOnCash": 0.08,
+    "maxLTV": 0.75,
+    "minScenariosPassingAll": 18,
+    "totalScenarios": 27,
+    "baseCase": {
+      "minNOI": 0,
+      "maxCapRate": 0.08,
+      "minCapRate": 0.04
+    },
+    "stressTest": {
+      "maxVacancyRate": 0.15,
+      "maxExpenseRatio": 0.55,
+      "maxInterestRate": 0.08
+    }
+  },
+  "financing": {
+    "maxLTV": 0.75,
+    "minDSCR": 1.25,
+    "maxInterestRate": 0.08,
+    "minLoanTerm_years": 5,
+    "maxOriginationFee_pct": 0.02,
+    "minLenderQuotes": 3,
+    "preferredLoanTypes": ["agency", "CMBS", "bank", "life-company"],
+    "maxPrepaymentPenalty": "yield-maintenance",
+    "agentTimeouts": {
+      "default_minutes": 30,
+      "lender-outreach_minutes": 60
+    }
+  },
+  "legal": {
+    "maxOpenViolations": 0,
+    "maxTitleExceptions": 5,
+    "requiredInsuranceCoverage": ["general-liability", "property", "umbrella", "flood"],
+    "estoppelReturnRate_min_pct": 0.80,
+    "maxEstoppelVariance_pct": 0.05,
+    "maxPendingLitigation": 0,
+    "criticalDocuments": [
+      "title-commitment",
+      "survey",
+      "estoppel-certificates",
+      "insurance-binders",
+      "loan-documents"
+    ],
+    "agentTimeouts": {
+      "default_minutes": 30,
+      "estoppel-tracker_minutes": 90,
+      "loan-doc-reviewer_minutes": 45
+    }
+  },
+  "closing": {
+    "requiredPreClosingItems": [
+      "title-clear",
+      "survey-approved",
+      "insurance-bound",
+      "loan-docs-signed",
+      "estoppels-collected",
+      "funds-wired"
+    ],
+    "maxClosingCostVariance_pct": 0.05,
+    "requiredFundsFlowApprovals": ["buyer", "seller", "lender", "title-company"],
+    "postClosingDeadline_days": 30,
+    "agentTimeouts": {
+      "default_minutes": 30,
+      "funds-flow-manager_minutes": 45
+    }
+  }
+}

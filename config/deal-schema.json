@@ -1,0 +1,651 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://cre-acquisition.local/schemas/deal.json",
+  "title": "CRE Acquisition Deal Configuration",
+  "description": "JSON Schema for validating deal.json files in the CRE Acquisition Orchestration System. Defines required fields, types, ranges, and constraints for a commercial real estate acquisition deal.",
+  "type": "object",
+
+  "required": [
+    "dealId",
+    "dealName",
+    "property",
+    "financials",
+    "financing",
+    "investmentStrategy",
+    "targetHoldPeriod",
+    "targetIRR",
+    "targetEquityMultiple",
+    "targetCashOnCash",
+    "seller",
+    "timeline"
+  ],
+
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Schema description header for the deal configuration file."
+    },
+
+    "dealId": {
+      "type": "string",
+      "pattern": "^DEAL-\\d{4}-\\d{3}$",
+      "description": "Unique deal identifier. Format: DEAL-YYYY-NNN.",
+      "examples": ["DEAL-2025-001", "DEAL-2025-042"]
+    },
+
+    "dealName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Human-readable deal name, typically the property name.",
+      "examples": ["Parkview Apartments", "Willow Creek Apartments"]
+    },
+
+    "property": {
+      "type": "object",
+      "description": "Physical property details.",
+      "required": [
+        "address",
+        "city",
+        "state",
+        "zip",
+        "propertyType",
+        "yearBuilt",
+        "totalUnits",
+        "unitMix"
+      ],
+      "properties": {
+        "address": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Street address of the property."
+        },
+        "city": {
+          "type": "string",
+          "minLength": 1,
+          "description": "City name."
+        },
+        "state": {
+          "type": "string",
+          "pattern": "^[A-Z]{2}$",
+          "description": "Two-letter US state abbreviation (uppercase)."
+        },
+        "zip": {
+          "type": "string",
+          "pattern": "^\\d{5}(-\\d{4})?$",
+          "description": "5-digit or 9-digit ZIP code."
+        },
+        "county": {
+          "type": "string",
+          "description": "County name."
+        },
+        "propertyType": {
+          "type": "string",
+          "enum": ["multifamily", "office", "retail", "industrial"],
+          "description": "Property type classification."
+        },
+        "yearBuilt": {
+          "type": "integer",
+          "minimum": 1800,
+          "maximum": 2030,
+          "description": "Original construction year."
+        },
+        "totalUnits": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Total residential unit count."
+        },
+        "totalSqFt": {
+          "type": ["integer", "null"],
+          "minimum": 1,
+          "description": "Total rentable square footage."
+        },
+        "avgUnitSqFt": {
+          "type": ["integer", "null"],
+          "minimum": 1,
+          "description": "Average unit size in square feet."
+        },
+        "stories": {
+          "type": ["integer", "null"],
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Number of stories/floors."
+        },
+        "buildings": {
+          "type": ["integer", "null"],
+          "minimum": 1,
+          "description": "Number of buildings in the complex."
+        },
+        "parking": {
+          "type": "object",
+          "description": "Parking details.",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["surface", "covered", "garage", "street", "mixed", "none", ""],
+              "description": "Parking type."
+            },
+            "spaces": {
+              "type": ["integer", "null"],
+              "minimum": 0,
+              "description": "Total parking spaces."
+            }
+          },
+          "additionalProperties": true
+        },
+        "amenities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Array of amenity strings."
+        },
+        "unitMix": {
+          "type": "object",
+          "description": "Unit mix breakdown.",
+          "required": ["types"],
+          "properties": {
+            "$description": {
+              "type": "string"
+            },
+            "types": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "required": ["type", "count", "avgSqFt", "marketRent", "inPlaceRent"],
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Unit type label (e.g., 'Studio', '1BR/1BA', '2BR/2BA')."
+                  },
+                  "count": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "Number of units of this type."
+                  },
+                  "avgSqFt": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "Average square footage for this unit type."
+                  },
+                  "marketRent": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "Current market rent per month in USD."
+                  },
+                  "inPlaceRent": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "Current actual in-place rent per month in USD."
+                  }
+                },
+                "additionalProperties": true
+              }
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+
+    "financials": {
+      "type": "object",
+      "description": "Financial metrics for the deal.",
+      "required": [
+        "askingPrice",
+        "currentNOI",
+        "inPlaceOccupancy"
+      ],
+      "properties": {
+        "askingPrice": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Seller's asking price or agreed purchase price in USD."
+        },
+        "pricePerUnit": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "description": "Price per unit in USD."
+        },
+        "currentNOI": {
+          "type": "number",
+          "description": "Current (trailing 12-month) Net Operating Income in USD."
+        },
+        "proFormaNOI": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "description": "Projected stabilized NOI after value-add execution."
+        },
+        "inPlaceOccupancy": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Current physical occupancy as a decimal (0.0-1.0)."
+        },
+        "marketOccupancy": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Submarket stabilized occupancy as a decimal (0.0-1.0)."
+        },
+        "trailingT12Revenue": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "description": "Trailing 12-month gross revenue in USD."
+        },
+        "trailingT12Expenses": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "description": "Trailing 12-month operating expenses in USD."
+        },
+        "capExBudget": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "description": "Planned capital expenditure budget in USD."
+        },
+        "renovationBudget": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "description": "Total renovation/repositioning budget in USD."
+        },
+        "estimatedClosingCosts": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "description": "Estimated total closing costs in USD."
+        }
+      },
+      "additionalProperties": true
+    },
+
+    "financing": {
+      "type": "object",
+      "description": "Target financing parameters.",
+      "required": [
+        "targetLTV",
+        "estimatedRate",
+        "loanTerm",
+        "amortization",
+        "loanType"
+      ],
+      "properties": {
+        "targetLTV": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Target Loan-to-Value ratio as decimal (0.0-1.0)."
+        },
+        "estimatedRate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Estimated interest rate as decimal."
+        },
+        "loanTerm": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 40,
+          "description": "Loan term in years."
+        },
+        "amortization": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 40,
+          "description": "Amortization period in years. 0 for interest-only."
+        },
+        "loanType": {
+          "type": "string",
+          "enum": ["Agency", "CMBS", "Bank", "Bridge", "Life Company", "HUD"],
+          "description": "Loan type/source."
+        },
+        "interestOnly": {
+          "type": "boolean",
+          "description": "Whether the loan has an interest-only period."
+        },
+        "ioPeriod": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10,
+          "description": "Interest-only period in years."
+        }
+      },
+      "additionalProperties": true
+    },
+
+    "investmentStrategy": {
+      "type": "string",
+      "enum": ["core", "core-plus", "value-add", "opportunistic"],
+      "description": "Investment strategy classification."
+    },
+
+    "strategyOptions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["core", "core-plus", "value-add", "opportunistic"]
+      },
+      "description": "Reference list of valid strategy values."
+    },
+
+    "targetHoldPeriod": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 30,
+      "description": "Planned hold period in years."
+    },
+
+    "targetIRR": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Target Internal Rate of Return as decimal."
+    },
+
+    "targetEquityMultiple": {
+      "type": "number",
+      "minimum": 1,
+      "description": "Target equity multiple (total return / equity invested)."
+    },
+
+    "targetCashOnCash": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Target stabilized cash-on-cash return as decimal."
+    },
+
+    "seller": {
+      "type": "object",
+      "description": "Seller and broker information.",
+      "required": ["entity"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Seller contact name or principal."
+        },
+        "entity": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Seller's legal entity name."
+        },
+        "broker": {
+          "type": "string",
+          "description": "Listing broker's name."
+        },
+        "brokerFirm": {
+          "type": "string",
+          "description": "Listing broker's firm."
+        },
+        "motivations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Array of strings describing seller motivations."
+        }
+      },
+      "additionalProperties": true
+    },
+
+    "buyer": {
+      "type": "object",
+      "description": "Buyer entity and contact information.",
+      "properties": {
+        "entity": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Buyer's legal entity name."
+        },
+        "contactName": {
+          "type": "string",
+          "description": "Primary buyer contact name."
+        },
+        "contactEmail": {
+          "type": "string",
+          "format": "email",
+          "description": "Primary buyer contact email."
+        },
+        "contactPhone": {
+          "type": "string",
+          "description": "Primary buyer contact phone."
+        }
+      },
+      "additionalProperties": true
+    },
+
+    "earnestMoney": {
+      "type": "object",
+      "description": "Earnest money deposit structure.",
+      "properties": {
+        "initialDeposit": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Initial earnest money deposit in USD."
+        },
+        "initialDepositTiming": {
+          "type": "string",
+          "description": "When the initial deposit is due."
+        },
+        "additionalDeposit": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Additional earnest money deposit in USD."
+        },
+        "additionalDepositTiming": {
+          "type": "string",
+          "description": "When the additional deposit is due."
+        },
+        "totalEarnestMoney": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Total earnest money in USD."
+        },
+        "goesHardDate": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "description": "Date when earnest money becomes non-refundable. Format: YYYY-MM-DD."
+        }
+      },
+      "additionalProperties": true
+    },
+
+    "timeline": {
+      "type": "object",
+      "description": "Key deal dates.",
+      "required": [
+        "psaExecutionDate",
+        "ddStartDate",
+        "ddExpirationDate",
+        "closingDate"
+      ],
+      "properties": {
+        "loiDate": {
+          "type": ["string", "null"],
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "description": "Letter of Intent submission date. Format: YYYY-MM-DD."
+        },
+        "psaExecutionDate": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "description": "Purchase & Sale Agreement execution date. Format: YYYY-MM-DD."
+        },
+        "ddStartDate": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "description": "Due diligence start date. Format: YYYY-MM-DD."
+        },
+        "ddExpirationDate": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "description": "Due diligence expiration date. Format: YYYY-MM-DD."
+        },
+        "financingCommitmentDeadline": {
+          "type": ["string", "null"],
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "description": "Deadline for securing financing commitment. Format: YYYY-MM-DD."
+        },
+        "closingDate": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "description": "Scheduled closing date. Format: YYYY-MM-DD."
+        },
+        "extensionOptions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["dd", "closing", "financing"],
+                "description": "Extension type."
+              },
+              "days": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Number of extension days."
+              },
+              "cost": {
+                "type": "number",
+                "minimum": 0,
+                "description": "Cost of extension in USD."
+              },
+              "description": {
+                "type": "string",
+                "description": "Human-readable description of the extension."
+              }
+            },
+            "additionalProperties": true
+          },
+          "description": "Available timeline extension options."
+        }
+      },
+      "additionalProperties": true
+    },
+
+    "keyMetrics": {
+      "type": "object",
+      "description": "Pre-calculated key metrics for quick reference. All rates as decimals.",
+      "properties": {
+        "inPlaceCapRate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "In-place cap rate (currentNOI / askingPrice)."
+        },
+        "proFormaCapRate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Pro forma cap rate (proFormaNOI / askingPrice)."
+        },
+        "grossRentMultiplier": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Gross Rent Multiplier (askingPrice / annual gross rent)."
+        },
+        "expenseRatio": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Operating expense ratio (expenses / revenue)."
+        },
+        "debtServiceCoverageRatio": {
+          "type": "number",
+          "minimum": 0,
+          "description": "DSCR (NOI / annual debt service). Lenders typically require >= 1.25."
+        },
+        "breakEvenOccupancy": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Occupancy needed to cover all expenses and debt service."
+        },
+        "pricePerSqFt": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Purchase price per square foot in USD."
+        },
+        "rentPerSqFt": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Monthly rent per square foot in USD."
+        },
+        "lossToLease": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Loss-to-lease as decimal ((market - inPlace) / market)."
+        },
+        "grossPotentialRent": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Annual gross potential rent at 100% occupancy and market rents."
+        }
+      },
+      "additionalProperties": true
+    },
+
+    "renovation": {
+      "type": "object",
+      "description": "Renovation plan details (for value-add and opportunistic strategies).",
+      "properties": {
+        "totalBudget": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Total renovation budget in USD."
+        },
+        "perUnitBudget": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Renovation budget per unit in USD."
+        },
+        "scope": {
+          "type": "string",
+          "description": "High-level scope description."
+        },
+        "interiorScope": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Interior renovation items."
+        },
+        "exteriorScope": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Exterior renovation items."
+        },
+        "commonAreaScope": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Common area renovation items."
+        },
+        "timelineMonths": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Renovation timeline in months."
+        },
+        "phasingStrategy": {
+          "type": "string",
+          "description": "How renovation will be phased."
+        }
+      },
+      "additionalProperties": true
+    },
+
+    "riskFactors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Array of identified risk factors."
+    },
+
+    "notes": {
+      "type": "string",
+      "description": "Free-form notes about the deal."
+    }
+  },
+
+  "additionalProperties": true
+}

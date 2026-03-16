@@ -1,0 +1,72 @@
+{
+  "dealId": "demo-fail-001",
+  "dealName": "Oakwood Terrace",
+  "expectedVerdict": "FAIL",
+  "property": {
+    "address": "1450 Oakwood Boulevard",
+    "city": "Houston",
+    "state": "TX",
+    "zip": "77033",
+    "county": "Harris",
+    "propertyType": "multifamily",
+    "yearBuilt": 1975,
+    "totalUnits": 100,
+    "totalSqFt": 75000,
+    "avgUnitSqFt": 750,
+    "stories": 2,
+    "buildings": 5,
+    "parking": { "type": "surface", "spaces": 120 },
+    "amenities": ["laundry facility", "playground"],
+    "unitMix": {
+      "types": [
+        { "type": "1BR/1BA", "count": 50, "avgSqFt": 650, "marketRent": 850, "inPlaceRent": 725 },
+        { "type": "2BR/1BA", "count": 35, "avgSqFt": 800, "marketRent": 1050, "inPlaceRent": 875 },
+        { "type": "2BR/2BA", "count": 15, "avgSqFt": 900, "marketRent": 1150, "inPlaceRent": 950 }
+      ]
+    }
+  },
+  "financials": {
+    "askingPrice": 12000000,
+    "pricePerUnit": 120000,
+    "currentNOI": 480000,
+    "proFormaNOI": 720000,
+    "inPlaceOccupancy": 0.72,
+    "marketOccupancy": 0.88,
+    "trailingT12Revenue": 960000,
+    "trailingT12Expenses": 480000,
+    "capExBudget": 1500000,
+    "renovationBudget": 2000000,
+    "estimatedClosingCosts": 180000
+  },
+  "financing": {
+    "targetLTV": 0.65,
+    "estimatedRate": 0.085,
+    "loanTerm": 5,
+    "amortization": 25,
+    "loanType": "Bridge",
+    "interestOnly": true,
+    "ioPeriod": 3
+  },
+  "investmentStrategy": "opportunistic",
+  "targetHoldPeriod": 3,
+  "targetIRR": 0.22,
+  "targetEquityMultiple": 2.0,
+  "targetCashOnCash": 0.05,
+  "seller": {
+    "name": "Oakwood Properties Inc",
+    "entity": "Texas Corporation",
+    "broker": "David Rodriguez",
+    "brokerFirm": "Summit Realty Group",
+    "motivations": ["distressed sale", "partnership dissolution", "deferred maintenance burden"]
+  },
+  "timeline": {
+    "loiDate": "2026-01-05",
+    "psaExecutionDate": "2026-01-15",
+    "ddStartDate": "2026-01-16",
+    "ddExpirationDate": "2026-02-28",
+    "financingCommitmentDeadline": "2026-03-31",
+    "closingDate": "2026-04-30",
+    "extensionOptions": ["30 days with $100,000 hard deposit"]
+  },
+  "notes": "WARNING: High-risk distressed asset. Property shows signs of significant deferred maintenance including roof issues, HVAC failures, and plumbing problems. Current occupancy of 72% is well below market. Submarket has experienced flat rent growth and elevated crime rates. Environmental Phase 1 flagged potential soil contamination from adjacent former gas station - Phase 2 recommended. Title search revealed unpaid mechanic's liens totaling $85,000. Several long-term tenants are on month-to-month leases below market. Bridge financing only - Agency lenders have declined. This deal has multiple dealbreakers that should result in a FAIL verdict."
+}

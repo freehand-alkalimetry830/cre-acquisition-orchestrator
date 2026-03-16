@@ -1,0 +1,15 @@
+{
+  "name": "value-add",
+  "description": "Renovation-driven play with medium risk and higher variance.",
+  "riskTilt": "elevated",
+  "assumptions": {
+    "occupancyShift": -0.03,
+    "rentGrowthShift": 0.004,
+    "expenseInflationShift": 0.01,
+    "capRateShiftBps": 25,
+    "lenderSpreadShiftBps": 30,
+    "legalComplexity": "medium",
+    "environmentalRisk": "medium"
+  },
+  "expectedVerdict": "CONDITIONAL"
+}

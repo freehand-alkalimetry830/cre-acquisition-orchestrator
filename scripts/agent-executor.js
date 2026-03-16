@@ -1,0 +1,250 @@
+#!/usr/bin/env node
+const path = require('path');
+const {
+  nowIso,
+  writeJson,
+  appendLog,
+  validateAgentCheckpoint
+} = require('./lib/runtime-core');
+
+function makeAgentCheckpoint({
+  agentName,
+  phaseKey,
+  dealId,
+  status,
+  progress,
+  startedAt,
+  completedAt,
+  summary,
+  findings,
+  metrics,
+  verdict,
+  dataGaps,
+  redFlags,
+  errors
+}) {
+  return {
+    agentName,
+    phase: phaseKey,
+    dealId,
+    status,
+    progress,
+    startedAt,
+    completedAt,
+    lastUpdatedAt: nowIso(),
+    resumePoint: status === 'failed' ? 'rerun-agent' : null,
+    outputs: {
+      summary,
+      findings,
+      metrics,
+      verdict
+    },
+    dataGaps,
+    errors: errors || [],
+    redFlags,
+    childAgents: []
+  };
+}
+
+function persistAgentCheckpoint(baseDir, agentCheckpoint, agentStatusDir) {
+  validateAgentCheckpoint(baseDir, agentCheckpoint);
+  const outputPath = path.join(agentStatusDir, `${agentCheckpoint.agentName}.json`);
+  writeJson(outputPath, agentCheckpoint);
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function executeAgent({
+  baseDir,
+  dealId,
+  phaseKey,
+  phaseLabel,
+  agentName,
+  agentStatusDir,
+  logFile,
+  agentFinding,
+  phaseData,
+  storyEngine,
+  failAgent,
+  agentDelayMs = 0
+}) {
+  const startedAt = nowIso();
+  appendLog(logFile, agentName, 'ACTION', `Started ${agentName} for ${phaseKey}`);
+  if (storyEngine) {
+    storyEngine.emit('agent_started', {
+      phase: phaseKey,
+      phaseLabel: phaseLabel || phaseKey,
+      agent: agentName,
+      title: `${agentName} started`,
+      status: 'running'
+    });
+  }
+
+  const runningCheckpoint = makeAgentCheckpoint({
+    agentName,
+    phaseKey,
+    dealId,
+    status: 'running',
+    progress: 0.35,
+    startedAt,
+    completedAt: null,
+    summary: `Running ${agentName}`,
+    findings: [],
+    metrics: {},
+    verdict: null,
+    dataGaps: [],
+    redFlags: [],
+    errors: []
+  });
+  persistAgentCheckpoint(baseDir, runningCheckpoint, agentStatusDir);
+
+  if (agentDelayMs > 0) {
+    await sleep(agentDelayMs);
+  }
+
+  if (failAgent && failAgent === agentName) {
+    const failedCheckpoint = makeAgentCheckpoint({
+      agentName,
+      phaseKey,
+      dealId,
+      status: 'failed',
+      progress: 1,
+      startedAt,
+      completedAt: nowIso(),
+      summary: `${agentName} failed via injection`,
+      findings: [],
+      metrics: {},
+      verdict: 'FAIL',
+      dataGaps: [],
+      redFlags: [],
+      errors: [
+        {
+          message: `Injected failure for agent ${agentName}`,
+          timestamp: nowIso(),
+          recoverable: true
+        }
+      ]
+    });
+    persistAgentCheckpoint(baseDir, failedCheckpoint, agentStatusDir);
+    appendLog(
+      logFile,
+      agentName,
+      'ERROR',
+      `Injected failure triggered for ${agentName}. Resume with --resume to continue.`
+    );
+    if (storyEngine) {
+      storyEngine.emit('agent_failed', {
+        phase: phaseKey,
+        phaseLabel: phaseLabel || phaseKey,
+        agent: agentName,
+        title: `${agentName} failed`,
+        error: `Injected failure for ${agentName}`
+      });
+    }
+    const err = new Error(`Injected failure for ${agentName}`);
+    err.code = 'INJECTED_FAILURE';
+    throw err;
+  }
+
+  const detail = agentFinding || {
+    status: 'COMPLETE',
+    finding: `${agentName} completed analysis with no material exceptions.`
+  };
+
+  const extractedRedFlags = Array.isArray(phaseData?.redFlags)
+    ? phaseData.redFlags.filter((f) => f.owner === agentName)
+    : [];
+  const extractedGaps = Array.isArray(phaseData?.dataGaps)
+    ? phaseData.dataGaps.filter((g) => g.owner === agentName)
+    : [];
+
+  appendLog(
+    logFile,
+    agentName,
+    'FINDING',
+    typeof detail.finding === 'string' ? detail.finding : `${agentName} emitted findings`
+  );
+  if (extractedGaps.length > 0) {
+    extractedGaps.forEach((gap) => {
+      appendLog(logFile, agentName, 'DATA_GAP', gap.message || `${agentName} reported a data gap`);
+    });
+  }
+
+  const completeCheckpoint = makeAgentCheckpoint({
+    agentName,
+    phaseKey,
+    dealId,
+    status: 'complete',
+    progress: 1,
+    startedAt,
+    completedAt: nowIso(),
+    summary:
+      typeof detail.finding === 'string'
+        ? detail.finding
+        : `${agentName} completed with structured output`,
+    findings: [typeof detail.finding === 'string' ? detail.finding : 'Completed'],
+    metrics: {
+      confidence: typeof detail.confidence === 'number' ? detail.confidence : 0.85
+    },
+    verdict: detail.status === 'CONDITIONAL' ? 'CONDITIONAL' : 'PASS',
+    dataGaps: extractedGaps,
+    redFlags: extractedRedFlags,
+    errors: []
+  });
+  persistAgentCheckpoint(baseDir, completeCheckpoint, agentStatusDir);
+  appendLog(logFile, agentName, 'COMPLETE', `${agentName} completed`);
+  if (storyEngine) {
+    storyEngine.emit('agent_completed', {
+      phase: phaseKey,
+      phaseLabel: phaseLabel || phaseKey,
+      agent: agentName,
+      title: `${agentName} completed`,
+      verdict: completeCheckpoint.outputs.verdict,
+      redFlagCount: extractedRedFlags.length,
+      dataGapCount: extractedGaps.length,
+      summary: completeCheckpoint.outputs.summary
+    });
+
+    const gapLines = extractedGaps.map((gap) => `- ${gap.message || 'Data gap noted'}`);
+    const redFlagLines = extractedRedFlags.map(
+      (flag) => `- [${flag.severity || 'MEDIUM'}] ${flag.message || 'Flag'}`
+    );
+    storyEngine.createDocument({
+      phase: phaseKey,
+      agent: agentName,
+      title: `${agentName} Workpaper`,
+      docType: 'workpaper',
+      summary: completeCheckpoint.outputs.summary,
+      content: [
+        `# ${agentName} Workpaper`,
+        '',
+        `- Deal: ${dealId}`,
+        `- Phase: ${phaseLabel || phaseKey}`,
+        `- Started: ${startedAt}`,
+        `- Completed: ${completeCheckpoint.completedAt}`,
+        `- Verdict: ${completeCheckpoint.outputs.verdict || 'PASS'}`,
+        '',
+        '## Findings',
+        ...completeCheckpoint.outputs.findings.map((finding) => `- ${finding}`),
+        '',
+        '## Red Flags',
+        ...(redFlagLines.length > 0 ? redFlagLines : ['- None']),
+        '',
+        '## Data Gaps',
+        ...(gapLines.length > 0 ? gapLines : ['- None']),
+        ''
+      ].join('\n'),
+      mime: 'text/markdown',
+      extension: 'md',
+      tags: ['agent', 'workpaper']
+    });
+  }
+
+  return completeCheckpoint;
+}
+
+module.exports = {
+  executeAgent
+};

@@ -1,0 +1,73 @@
+{
+  "dealId": "demo-pass-001",
+  "dealName": "Riverside Gardens",
+  "expectedVerdict": "PASS",
+  "property": {
+    "address": "2850 Riverside Parkway",
+    "city": "San Antonio",
+    "state": "TX",
+    "zip": "78209",
+    "county": "Bexar",
+    "propertyType": "multifamily",
+    "yearBuilt": 2018,
+    "totalUnits": 150,
+    "totalSqFt": 142500,
+    "avgUnitSqFt": 950,
+    "stories": 4,
+    "buildings": 3,
+    "parking": { "type": "garage", "spaces": 225 },
+    "amenities": ["pool", "fitness center", "clubhouse", "business center", "dog park", "rooftop deck", "package lockers", "EV charging"],
+    "unitMix": {
+      "types": [
+        { "type": "Studio", "count": 20, "avgSqFt": 550, "marketRent": 1200, "inPlaceRent": 1175 },
+        { "type": "1BR/1BA", "count": 60, "avgSqFt": 750, "marketRent": 1450, "inPlaceRent": 1425 },
+        { "type": "2BR/2BA", "count": 55, "avgSqFt": 1100, "marketRent": 1850, "inPlaceRent": 1825 },
+        { "type": "3BR/2BA", "count": 15, "avgSqFt": 1350, "marketRent": 2300, "inPlaceRent": 2275 }
+      ]
+    }
+  },
+  "financials": {
+    "askingPrice": 28000000,
+    "pricePerUnit": 186667,
+    "currentNOI": 1850000,
+    "proFormaNOI": 1920000,
+    "inPlaceOccupancy": 0.96,
+    "marketOccupancy": 0.95,
+    "trailingT12Revenue": 3100000,
+    "trailingT12Expenses": 1250000,
+    "capExBudget": 150000,
+    "renovationBudget": 0,
+    "estimatedClosingCosts": 420000
+  },
+  "financing": {
+    "targetLTV": 0.70,
+    "estimatedRate": 0.0575,
+    "loanTerm": 10,
+    "amortization": 30,
+    "loanType": "Agency",
+    "interestOnly": false,
+    "ioPeriod": 0
+  },
+  "investmentStrategy": "core",
+  "targetHoldPeriod": 7,
+  "targetIRR": 0.10,
+  "targetEquityMultiple": 1.6,
+  "targetCashOnCash": 0.07,
+  "seller": {
+    "name": "Riverside Development Group",
+    "entity": "Texas Limited Partnership",
+    "broker": "Michael Chen",
+    "brokerFirm": "Meridian Advisors",
+    "motivations": ["fund maturity", "return of capital to LPs"]
+  },
+  "timeline": {
+    "loiDate": "2026-01-10",
+    "psaExecutionDate": "2026-01-20",
+    "ddStartDate": "2026-01-21",
+    "ddExpirationDate": "2026-02-20",
+    "financingCommitmentDeadline": "2026-03-05",
+    "closingDate": "2026-03-20",
+    "extensionOptions": ["10 days with $25,000 hard deposit"]
+  },
+  "notes": "Stabilized core asset. Built in 2018 with modern finishes. Strong submarket fundamentals with 3.5% rent growth over last 12 months. Institutional-quality construction and amenities. Minimal deferred maintenance. In-place rents are at market - limited loss-to-lease. Clean title, no known environmental issues. This is a straightforward acquisition with strong fundamentals."
+}

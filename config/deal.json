@@ -1,0 +1,193 @@
+{
+  "dealId": "parkview-2026-001",
+  "dealName": "Parkview Apartments",
+  "property": {
+    "address": "4200 Parkview Drive",
+    "city": "Austin",
+    "state": "TX",
+    "zip": "78745",
+    "county": "Travis",
+    "submarket": "South Austin",
+    "msa": "Austin-Round Rock-San Marcos",
+    "propertyType": "multifamily",
+    "propertyClass": "B",
+    "yearBuilt": 1998,
+    "yearRenovated": null,
+    "totalUnits": 200,
+    "totalSqFt": 180000,
+    "avgUnitSqFt": 900,
+    "stories": 3,
+    "buildings": 8,
+    "construction": "wood-frame",
+    "parking": {
+      "type": "surface",
+      "spaces": 320,
+      "covered": 80,
+      "ratio": 1.6
+    },
+    "amenities": [
+      "pool",
+      "fitness center",
+      "clubhouse",
+      "business center",
+      "dog park",
+      "playground",
+      "laundry facility",
+      "package lockers",
+      "controlled access"
+    ],
+    "unitMix": {
+      "types": [
+        {
+          "type": "1BR/1BA",
+          "count": 80,
+          "avgSqFt": 725,
+          "marketRent": 1350,
+          "inPlaceRent": 1225
+        },
+        {
+          "type": "2BR/1BA",
+          "count": 40,
+          "avgSqFt": 900,
+          "marketRent": 1600,
+          "inPlaceRent": 1450
+        },
+        {
+          "type": "2BR/2BA",
+          "count": 60,
+          "avgSqFt": 1050,
+          "marketRent": 1800,
+          "inPlaceRent": 1650
+        },
+        {
+          "type": "3BR/2BA",
+          "count": 20,
+          "avgSqFt": 1200,
+          "marketRent": 2100,
+          "inPlaceRent": 1900
+        }
+      ]
+    }
+  },
+  "financials": {
+    "askingPrice": 32000000,
+    "pricePerUnit": 160000,
+    "pricePerSqFt": 178,
+    "currentNOI": 1976500,
+    "proFormaNOI": 2400000,
+    "goingInCapRate": 0.0618,
+    "inPlaceOccupancy": 0.93,
+    "marketOccupancy": 0.95,
+    "trailingT12Revenue": 3414000,
+    "trailingT12Expenses": 1437500,
+    "grossPotentialRent": 3600000,
+    "vacancyLoss": 180000,
+    "lossToLease": 84000,
+    "concessions": 30000,
+    "badDebt": 12000,
+    "otherIncome": 120000,
+    "expenseBreakdown": {
+      "taxes": 320000,
+      "insurance": 80000,
+      "utilities": 175500,
+      "repairs": 202000,
+      "management": 150000,
+      "payroll": 280000,
+      "admin": 45000,
+      "marketing": 35000,
+      "contractServices": 90000,
+      "reserves": 60000
+    },
+    "expenseRatio": 0.421,
+    "expensePerUnit": 7188,
+    "capExBudget": 500000,
+    "renovationBudget": 2000000,
+    "renovationPerUnit": 10000,
+    "estimatedClosingCosts": 960000
+  },
+  "financing": {
+    "targetLTV": 0.75,
+    "estimatedRate": 0.065,
+    "loanTerm": 10,
+    "amortization": 30,
+    "loanType": "Agency",
+    "interestOnly": true,
+    "ioPeriod": 2
+  },
+  "investmentStrategy": "value-add",
+  "targetHoldPeriod": 5,
+  "targetIRR": 0.15,
+  "targetEquityMultiple": 1.8,
+  "targetCashOnCash": 0.08,
+  "seller": {
+    "name": "Parkview Holdings LLC",
+    "entity": "Texas LLC",
+    "ownershipDuration": "8 years",
+    "broker": "Jane Smith",
+    "brokerFirm": "Apex Capital Markets",
+    "brokerEmail": "jane.smith@example.com",
+    "brokerPhone": "512-555-1234",
+    "motivations": [
+      "portfolio rebalancing",
+      "capital recycling"
+    ]
+  },
+  "timeline": {
+    "callForOffers": "2026-01-10",
+    "bestAndFinal": "2026-01-20",
+    "sellerSelection": "2026-01-25",
+    "psaExecutionDate": "2026-01-30",
+    "ddStartDate": "2026-01-31",
+    "ddExpirationDate": "2026-03-01",
+    "financingCommitmentDeadline": "2026-03-15",
+    "closingDate": "2026-03-31",
+    "extensionOptions": [
+      "15 days with $50,000 hard deposit"
+    ]
+  },
+  "valueAddPlan": {
+    "interiorRenovation": {
+      "totalBudget": 2000000,
+      "perUnit": 10000,
+      "components": [
+        "flooring",
+        "countertops",
+        "cabinets",
+        "fixtures",
+        "appliances",
+        "lighting",
+        "paint"
+      ],
+      "expectedRentPremium": 250,
+      "timeline": "18-24 months"
+    },
+    "exteriorImprovements": {
+      "totalBudget": 500000,
+      "components": [
+        "clubhouse refresh",
+        "pool upgrade",
+        "fitness equipment",
+        "signage",
+        "landscaping",
+        "exterior paint"
+      ]
+    }
+  },
+  "dataSourceFiles": [
+    "rent-roll-sample.csv",
+    "t12-financials-sample.csv",
+    "offering-memo-sample.md"
+  ],
+  "extractionMetadata": {
+    "extractedAt": "2026-02-01T12:00:00Z",
+    "confidence": 0.92,
+    "conflicts": [],
+    "dataGaps": [
+      "No Phase I ESA document",
+      "No PCA/inspection report",
+      "No title commitment",
+      "Rent roll is sample (36 of 200 units)"
+    ]
+  },
+  "notes": "Value-add opportunity in South Austin. Units have not been renovated since 2010. Interior renovations estimated at $10,000/unit for upgraded finishes, appliances, and flooring. Expected rent premium of $200-300/unit post-renovation. Strong submarket fundamentals with proximity to major employers."
+}

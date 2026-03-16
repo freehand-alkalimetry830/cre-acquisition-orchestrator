@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "events/phase-completion.schema.json",
+  "title": "Phase Completion Event",
+  "type": "object",
+  "required": [
+    "type",
+    "dealId",
+    "phase",
+    "phaseId",
+    "status",
+    "verdict",
+    "durationMs",
+    "timestamp",
+    "traceId"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["PHASE_COMPLETION"]
+    },
+    "dealId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "phase": {
+      "type": "string",
+      "enum": ["dueDiligence", "underwriting", "financing", "legal", "closing"]
+    },
+    "phaseId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": ["COMPLETE", "FAILED", "CONDITIONAL"]
+    },
+    "verdict": {
+      "type": "string",
+      "enum": ["PASS", "FAIL", "CONDITIONAL", "GO", "NO_GO"]
+    },
+    "durationMs": {
+      "type": "number",
+      "minimum": 0
+    },
+    "dataGapCount": {
+      "type": "number",
+      "minimum": 0
+    },
+    "redFlagCount": {
+      "type": "number",
+      "minimum": 0
+    },
+    "criticalFlags": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "metrics": {
+      "type": "object"
+    },
+    "timestamp": {
+      "type": "string",
+      "minLength": 10
+    },
+    "traceId": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "additionalProperties": true
+}

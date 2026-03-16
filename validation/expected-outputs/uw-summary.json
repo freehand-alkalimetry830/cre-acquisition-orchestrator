@@ -1,0 +1,45 @@
+{
+  "$description": "Expected output structure from Underwriting phase on test deal",
+  "phaseVerdict": "CONDITIONAL",
+  "confidence": 82,
+  "expectedAgentCount": 3,
+  "expectedAgents": [
+    "financial-model-builder",
+    "scenario-analyst",
+    "ic-memo-writer"
+  ],
+  "expectedMetrics": {
+    "purchasePrice": { "value": 32000000, "unit": "dollars" },
+    "pricePerUnit": { "min": 155000, "max": 165000, "unit": "dollars" },
+    "goingInCapRate": { "min": 4.5, "max": 6.5, "unit": "percent" },
+    "stabilizedCapRate": { "min": 5.5, "max": 7.5, "unit": "percent" },
+    "year1NOI": { "min": 1600000, "max": 2200000, "unit": "dollars" },
+    "stabilizedNOI": { "min": 1900000, "max": 2500000, "unit": "dollars" },
+    "dscr": { "min": 1.15, "max": 1.60, "unit": "ratio" },
+    "cashOnCash": { "min": 5, "max": 12, "unit": "percent" },
+    "debtYield": { "min": 7, "max": 12, "unit": "percent" },
+    "irr5Year": { "min": 10, "max": 22, "unit": "percent" },
+    "equityMultiple": { "min": 1.4, "max": 2.2, "unit": "multiple" }
+  },
+  "scenarioAnalysis": {
+    "totalScenarios": 27,
+    "scenariosWithDSCRBelow1": { "max": 5 },
+    "scenariosWithNegativeCashFlow": { "max": 3 },
+    "probabilityWeightedIRR": { "min": 12, "max": 20, "unit": "percent" }
+  },
+  "requiredOutputKeys": [
+    "phaseSummary",
+    "financialModel",
+    "scenarioResults",
+    "icMemo",
+    "phaseVerdict",
+    "dataForDownstream"
+  ],
+  "requiredDataForDownstream": [
+    "proForma5Year",
+    "returnMetrics",
+    "scenarioMatrix",
+    "probabilityWeightedReturns",
+    "riskScore"
+  ]
+}

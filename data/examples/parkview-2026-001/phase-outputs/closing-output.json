@@ -1,0 +1,110 @@
+{
+  "scenarioVerdict": "GO",
+  "preClosingStatus": {
+    "complete": 5,
+    "total": 6,
+    "pendingItems": [
+      "Entity authorization package completion"
+    ]
+  },
+  "closingAgent": "Acquisition Closing Desk",
+  "purchasePrice": 32000000,
+  "loanAmount": 24000000,
+  "equityRequired": 8960000,
+  "closingCosts": 960000,
+  "prorations": [
+    {
+      "lineItem": "Tax Proration",
+      "amount": 27457
+    },
+    {
+      "lineItem": "Insurance Proration",
+      "amount": 11252
+    }
+  ],
+  "fundsFlow": {
+    "sources": [
+      {
+        "item": "Senior Loan Proceeds",
+        "amount": 24000000
+      },
+      {
+        "item": "Buyer Equity",
+        "amount": 8960000
+      },
+      {
+        "item": "Security Deposit Credit",
+        "amount": 150169
+      }
+    ],
+    "uses": [
+      {
+        "item": "Purchase Price",
+        "amount": 32000000
+      },
+      {
+        "item": "Closing Costs",
+        "amount": 960000
+      },
+      {
+        "item": "Tax Proration",
+        "amount": 27457
+      },
+      {
+        "item": "Insurance Proration",
+        "amount": 11252
+      },
+      {
+        "item": "Buyer Return at Close",
+        "amount": 111460
+      }
+    ],
+    "totalSources": 33110169,
+    "totalUses": 33110169,
+    "balanced": true
+  },
+  "keyMerits": [
+    "Funding stack reconciled and balanced",
+    "Legal and financing requirements aligned",
+    "Execution timeline ready for close"
+  ],
+  "keyRisks": [
+    "1 pre-closing items remain"
+  ],
+  "conditions": [
+    {
+      "id": "closing-condition-1",
+      "description": "Entity authorization package completion",
+      "severity": "HIGH",
+      "owner": "closing-coordinator",
+      "status": "OPEN"
+    }
+  ],
+  "riskScore": 78,
+  "redFlagCount": 1,
+  "dataGapCount": 1,
+  "redFlags": [
+    {
+      "id": "closing-pending",
+      "severity": "HIGH",
+      "category": "CLOSING",
+      "message": "1 pre-closing items remain",
+      "impact": "Could delay close date",
+      "owner": "closing-coordinator",
+      "status": "OPEN",
+      "createdAt": "2026-02-24T01:21:59.735Z"
+    }
+  ],
+  "dataGaps": [
+    {
+      "id": "closing-notices",
+      "severity": "MEDIUM",
+      "category": "DATA_GAP",
+      "message": "Tenant notice packet final approval pending",
+      "impact": "Could reduce confidence in recommendation",
+      "owner": "transfer-doc-preparer",
+      "status": "OPEN",
+      "createdAt": "2026-02-24T01:21:59.735Z"
+    }
+  ]
+}

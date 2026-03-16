@@ -1,0 +1,174 @@
+{
+  "$schema": "Deal Configuration - Parkview Apartments Reference Example",
+  "$_description": "FULLY POPULATED example deal. Every field has a realistic value. Use this as a reference when filling out deal.json for a new acquisition.",
+
+  "dealId": "DEAL-2025-001",
+  "dealName": "Parkview Apartments",
+
+  "property": {
+    "address": "4200 SE Division Street",
+    "city": "Portland",
+    "state": "OR",
+    "zip": "97202",
+    "county": "Multnomah",
+    "propertyType": "multifamily",
+    "yearBuilt": 1988,
+    "totalUnits": 200,
+    "totalSqFt": 180000,
+    "avgUnitSqFt": 900,
+    "stories": 3,
+    "buildings": 8,
+    "parking": {
+      "type": "surface",
+      "spaces": 250
+    },
+    "amenities": [
+      "pool",
+      "fitness center",
+      "clubhouse",
+      "dog park",
+      "business center",
+      "playground",
+      "on-site laundry",
+      "package lockers"
+    ],
+    "unitMix": {
+      "$description": "Array of unit types with count and rent",
+      "types": [
+        {
+          "type": "Studio",
+          "count": 20,
+          "avgSqFt": 500,
+          "marketRent": 1200,
+          "inPlaceRent": 1100
+        },
+        {
+          "type": "1BR/1BA",
+          "count": 80,
+          "avgSqFt": 750,
+          "marketRent": 1500,
+          "inPlaceRent": 1400
+        },
+        {
+          "type": "2BR/1BA",
+          "count": 60,
+          "avgSqFt": 1000,
+          "marketRent": 1850,
+          "inPlaceRent": 1725
+        },
+        {
+          "type": "2BR/2BA",
+          "count": 30,
+          "avgSqFt": 1100,
+          "marketRent": 2000,
+          "inPlaceRent": 1875
+        },
+        {
+          "type": "3BR/2BA",
+          "count": 10,
+          "avgSqFt": 1300,
+          "marketRent": 2400,
+          "inPlaceRent": 2250
+        }
+      ]
+    }
+  },
+
+  "financials": {
+    "askingPrice": 32000000,
+    "pricePerUnit": 160000,
+    "currentNOI": 2063700,
+    "proFormaNOI": 2400000,
+    "inPlaceOccupancy": 0.93,
+    "marketOccupancy": 0.95,
+    "trailingT12Revenue": 3571200,
+    "trailingT12Expenses": 1507500,
+    "capExBudget": 500000,
+    "renovationBudget": 2000000,
+    "estimatedClosingCosts": 480000
+  },
+
+  "financing": {
+    "targetLTV": 0.70,
+    "estimatedRate": 0.0565,
+    "loanTerm": 10,
+    "amortization": 30,
+    "loanType": "Agency",
+    "interestOnly": true,
+    "ioPeriod": 2
+  },
+
+  "investmentStrategy": "core-plus",
+  "strategyOptions": ["core", "core-plus", "value-add", "opportunistic"],
+  "targetHoldPeriod": 5,
+  "targetIRR": 0.15,
+  "targetEquityMultiple": 1.8,
+  "targetCashOnCash": 0.08,
+
+  "seller": {
+    "name": "Robert Chen",
+    "entity": "Portland Realty Holdings LLC",
+    "broker": "Michael Torres",
+    "brokerFirm": "Summit Realty Group",
+    "motivations": [
+      "portfolio rebalancing",
+      "retiring from active management",
+      "1031 exchange timeline pressure"
+    ]
+  },
+
+  "buyer": {
+    "entity": "Pacific Northwest Capital Partners LLC",
+    "contactName": "Sarah Williams",
+    "contactEmail": "swilliams@example.com",
+    "contactPhone": "503-555-0142"
+  },
+
+  "earnestMoney": {
+    "initialDeposit": 500000,
+    "initialDepositTiming": "Day 1 (PSA execution)",
+    "additionalDeposit": 500000,
+    "additionalDepositTiming": "DD expiration (2025-03-01)",
+    "totalEarnestMoney": 1000000,
+    "goesHardDate": "2025-03-01"
+  },
+
+  "timeline": {
+    "loiDate": "2025-01-05",
+    "psaExecutionDate": "2025-01-15",
+    "ddStartDate": "2025-01-15",
+    "ddExpirationDate": "2025-03-01",
+    "financingCommitmentDeadline": "2025-03-15",
+    "closingDate": "2025-04-15",
+    "extensionOptions": [
+      {
+        "type": "dd",
+        "days": 15,
+        "cost": 50000,
+        "description": "Due diligence extension - 15 days for additional $50K earnest money"
+      },
+      {
+        "type": "closing",
+        "days": 30,
+        "cost": 100000,
+        "description": "Closing extension - 30 days for additional $100K earnest money"
+      }
+    ]
+  },
+
+  "keyMetrics": {
+    "$_description": "Pre-calculated key metrics for quick reference. These are derived from the data above.",
+    "inPlaceCapRate": 0.0645,
+    "proFormaCapRate": 0.075,
+    "grossRentMultiplier": 8.33,
+    "expenseRatio": 0.422,
+    "debtServiceCoverageRatio": 1.45,
+    "breakEvenOccupancy": 0.82,
+    "pricePerSqFt": 177.78,
+    "rentPerSqFt": 1.78,
+    "lossToLease": 0.068,
+    "grossPotentialRent": 3840000
+  },
+
+  "notes": "Class B garden-style multifamily in established SE Portland submarket. Property is well-maintained but dated finishes present core-plus repositioning opportunity. Adjacent to new light rail station (Division Transit Project) opening 2026. Strong rental demand driven by Portland metro in-migration. Seller is a long-term holder (since 2002) retiring from active management. 1031 exchange timeline creates motivation for clean, timely close. Environmental Phase I expected clean - no known contamination. Deferred maintenance items include roof sections (Buildings 3, 7), parking lot resurfacing, and HVAC units in Building 5."
+}

@@ -1,0 +1,45 @@
+{
+  "$schema": "Phase Checkpoint Template",
+  "$description": "Copy this template for each phase's runtime checkpoint. Embedded within data/status/{deal-id}.json under phases.{phase-name}",
+  "phaseName": "",
+  "phaseNumber": 0,
+  "dealId": "",
+  "status": "pending",
+  "statusOptions": ["pending", "running", "complete", "failed", "blocked"],
+  "progress": 0,
+  "startedAt": null,
+  "completedAt": null,
+  "lastUpdatedAt": null,
+  "dependencies": {
+    "$description": "Phases that must complete before this one can start",
+    "requiredPhases": [],
+    "dependenciesMet": false
+  },
+  "agents": {
+    "$description": "Map of agent names to their status summary",
+    "total": 0,
+    "completed": 0,
+    "running": 0,
+    "failed": 0,
+    "pending": 0,
+    "agentList": []
+  },
+  "agentListFormat": "Array of { name: string, status: string, checkpointPath: string }",
+  "outputs": {
+    "$description": "Aggregated outputs from all agents in this phase",
+    "phaseSummary": "",
+    "keyFindings": [],
+    "redFlags": [],
+    "dataGaps": [],
+    "metrics": {},
+    "phaseVerdict": null,
+    "verdictOptions": ["PASS", "FAIL", "CONDITIONAL", "INCOMPLETE"]
+  },
+  "dataForDownstream": {
+    "$description": "Aggregated data from this phase that downstream phases need"
+  },
+  "reportPath": null,
+  "reportPathDescription": "Path to the phase report file: data/reports/{deal-id}/{phase-name}-report.md",
+  "logPath": "data/logs/{deal-id}/{phase-name}.log",
+  "resumeInstructions": "Read agent statuses. Skip completed agents (use cached outputs). Re-launch failed agents with error context. Launch pending agents whose dependencies are met."
+}

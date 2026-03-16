@@ -1,0 +1,83 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "phases/closing-data.schema.json",
+  "title": "Closing Downstream Data",
+  "type": "object",
+  "required": [
+    "preClosingStatus",
+    "fundsFlow",
+    "purchasePrice",
+    "loanAmount",
+    "equityRequired",
+    "keyMerits",
+    "keyRisks",
+    "conditions",
+    "riskScore",
+    "redFlagCount",
+    "dataGapCount"
+  ],
+  "properties": {
+    "preClosingStatus": {
+      "type": "object",
+      "required": ["complete", "total"],
+      "properties": {
+        "complete": { "type": "number" },
+        "total": { "type": "number" },
+        "pendingItems": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "fundsFlow": {
+      "type": "object",
+      "required": ["sources", "uses", "totalSources", "totalUses", "balanced"],
+      "properties": {
+        "sources": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "uses": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "totalSources": { "type": "number" },
+        "totalUses": { "type": "number" },
+        "balanced": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "prorations": {
+      "type": ["array", "object"]
+    },
+    "purchasePrice": { "type": "number" },
+    "loanAmount": { "type": "number" },
+    "equityRequired": { "type": "number" },
+    "closingCosts": { "type": "number" },
+    "keyMerits": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "keyRisks": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "conditions": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "riskScore": {
+      "type": "number"
+    },
+    "redFlagCount": {
+      "type": "number",
+      "minimum": 0
+    },
+    "dataGapCount": {
+      "type": "number",
+      "minimum": 0
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,105 @@
+{
+  "agentFindings": {
+    "psa-reviewer": {
+      "status": "COMPLETE",
+      "finding": "PSA reviewed and deadlines calendared."
+    },
+    "loan-doc-reviewer": {
+      "status": "COMPLETE",
+      "finding": "Loan docs align with selected financing terms."
+    },
+    "title-survey-reviewer": {
+      "status": "COMPLETE",
+      "finding": "Title and survey package clear."
+    },
+    "estoppel-tracker": {
+      "status": "COMPLETE",
+      "finding": "157/180 estoppels collected.",
+      "total": 180,
+      "received": 157,
+      "returnRate": 0.8722,
+      "minimumRequired": 0.8,
+      "discrepancies": 8,
+      "discrepancyNote": "Discrepancies concentrated in concessions and lease dates."
+    },
+    "insurance-coordinator": {
+      "status": "COMPLETE",
+      "finding": "Primary insurance coverages bound.",
+      "policies": [
+        {
+          "type": "General Liability",
+          "annual": 241643
+        },
+        {
+          "type": "Property",
+          "annual": 234874
+        },
+        {
+          "type": "Umbrella",
+          "annual": 99990
+        }
+      ],
+      "totalAnnualPremium": 576507,
+      "perUnit": 2883
+    },
+    "transfer-doc-preparer": {
+      "status": "CONDITIONAL",
+      "finding": "Transfer package drafted pending one entity certificate.",
+      "documents": [
+        "Deed",
+        "Bill of Sale",
+        "Assignment of Leases",
+        "Tenant Notices",
+        "FIRPTA Certificate"
+      ]
+    }
+  },
+  "psaStatus": {
+    "reviewStatus": "REVIEWED"
+  },
+  "titleStatus": {
+    "status": "CLEAR"
+  },
+  "estoppelStatus": {
+    "returnRate": 0.8722
+  },
+  "insuranceStatus": {
+    "overallStatus": "ALL_BOUND"
+  },
+  "transferDocStatus": {
+    "overallReadiness": "DRAFT"
+  },
+  "closingChecklistStatus": {
+    "preClosingItems": {
+      "completed": 16,
+      "total": 18
+    },
+    "closingDayItems": {
+      "completed": 9,
+      "total": 11
+    },
+    "postClosingItems": {
+      "identified": 4,
+      "total": 6
+    },
+    "criticalPathItems": [
+      "Entity authorization package"
+    ]
+  },
+  "riskScore": 86,
+  "redFlagCount": 0,
+  "dataGapCount": 1,
+  "redFlags": [],
+  "dataGaps": [
+    {
+      "id": "legal-entity-docs",
+      "severity": "MEDIUM",
+      "category": "DATA_GAP",
+      "message": "One seller entity certificate still pending notarization",
+      "impact": "Could reduce confidence in recommendation",
+      "owner": "transfer-doc-preparer",
+      "status": "OPEN",
+      "createdAt": "2026-02-24T01:21:47.641Z"
+    }
+  ]
+}

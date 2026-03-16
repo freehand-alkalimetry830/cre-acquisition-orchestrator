@@ -1,0 +1,47 @@
+{
+  "$description": "Expected output structure from Due Diligence phase on test deal",
+  "phaseVerdict": "CONDITIONAL",
+  "confidence": 78,
+  "expectedAgentCount": 7,
+  "expectedAgents": [
+    "rent-roll-analyst",
+    "opex-analyst",
+    "physical-inspection",
+    "legal-title-review",
+    "market-study",
+    "tenant-credit",
+    "environmental-review"
+  ],
+  "expectedMetrics": {
+    "physicalOccupancy": { "min": 90, "max": 96, "unit": "percent" },
+    "economicOccupancy": { "min": 87, "max": 94, "unit": "percent" },
+    "averageInPlaceRent": { "min": 1200, "max": 1600, "unit": "dollars" },
+    "lossToLease": { "min": 3, "max": 12, "unit": "percent" },
+    "totalOpEx": { "min": 4500, "max": 6500, "unit": "dollars_per_unit" },
+    "expenseRatio": { "min": 40, "max": 55, "unit": "percent" },
+    "deferredMaintenance": { "min": 200000, "max": 800000, "unit": "dollars" },
+    "capExBudget5Year": { "min": 1000000, "max": 3000000, "unit": "dollars" },
+    "marketRentGrowth": { "min": 2, "max": 6, "unit": "percent" },
+    "supplyPipelineUnits": { "min": 0, "max": 5000, "unit": "units" }
+  },
+  "requiredOutputKeys": [
+    "phaseSummary",
+    "keyFindings",
+    "redFlags",
+    "dataGaps",
+    "metrics",
+    "phaseVerdict",
+    "dataForDownstream"
+  ],
+  "requiredDataForDownstream": [
+    "rentRollAnalysis",
+    "opExAnalysis",
+    "physicalCondition",
+    "titleStatus",
+    "marketStudy",
+    "tenantCreditSummary",
+    "environmentalStatus"
+  ],
+  "expectedRedFlagCount": { "min": 1, "max": 8 },
+  "expectedDataGapCount": { "min": 0, "max": 5 }
+}

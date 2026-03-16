@@ -1,0 +1,15 @@
+{
+  "name": "core-plus",
+  "description": "Stabilized asset with moderate upside and low distress risk.",
+  "riskTilt": "moderate",
+  "assumptions": {
+    "occupancyShift": 0.01,
+    "rentGrowthShift": 0.002,
+    "expenseInflationShift": 0.0,
+    "capRateShiftBps": 0,
+    "lenderSpreadShiftBps": -20,
+    "legalComplexity": "low",
+    "environmentalRisk": "low"
+  },
+  "expectedVerdict": "GO"
+}

@@ -1,0 +1,213 @@
+{
+  "$schema": "Deal Configuration - Opportunistic Multifamily Example",
+  "$_description": "Distressed, high-upside opportunistic acquisition. Class C asset with significant deferred maintenance and repositioning potential from C to B- through full renovation.",
+
+  "dealId": "DEAL-2025-003",
+  "dealName": "Riverside Commons",
+
+  "property": {
+    "address": "2740 Riverside Boulevard",
+    "city": "Memphis",
+    "state": "TN",
+    "zip": "38109",
+    "county": "Shelby",
+    "propertyType": "multifamily",
+    "yearBuilt": 1972,
+    "totalUnits": 80,
+    "totalSqFt": 64000,
+    "avgUnitSqFt": 800,
+    "stories": 2,
+    "buildings": 5,
+    "parking": {
+      "type": "surface",
+      "spaces": 100
+    },
+    "amenities": [
+      "laundry facility",
+      "playground",
+      "on-site management office"
+    ],
+    "unitMix": {
+      "$description": "Array of unit types with count and rent",
+      "types": [
+        {
+          "type": "1BR/1BA",
+          "count": 30,
+          "avgSqFt": 650,
+          "marketRent": 750,
+          "inPlaceRent": 625
+        },
+        {
+          "type": "2BR/1BA",
+          "count": 35,
+          "avgSqFt": 850,
+          "marketRent": 925,
+          "inPlaceRent": 775
+        },
+        {
+          "type": "3BR/2BA",
+          "count": 15,
+          "avgSqFt": 1050,
+          "marketRent": 1100,
+          "inPlaceRent": 900
+        }
+      ]
+    }
+  },
+
+  "financials": {
+    "askingPrice": 4800000,
+    "pricePerUnit": 60000,
+    "currentNOI": 312000,
+    "proFormaNOI": 576000,
+    "inPlaceOccupancy": 0.78,
+    "marketOccupancy": 0.92,
+    "trailingT12Revenue": 624000,
+    "trailingT12Expenses": 312000,
+    "capExBudget": 250000,
+    "renovationBudget": 2000000,
+    "estimatedClosingCosts": 96000
+  },
+
+  "financing": {
+    "targetLTV": 0.75,
+    "estimatedRate": 0.085,
+    "loanTerm": 3,
+    "amortization": 3,
+    "loanType": "Bridge",
+    "interestOnly": true,
+    "ioPeriod": 3
+  },
+
+  "investmentStrategy": "opportunistic",
+  "strategyOptions": ["core", "core-plus", "value-add", "opportunistic"],
+  "targetHoldPeriod": 5,
+  "targetIRR": 0.22,
+  "targetEquityMultiple": 2.2,
+  "targetCashOnCash": 0.04,
+
+  "seller": {
+    "name": "William Carter",
+    "entity": "Carter Family Trust",
+    "broker": "Anthony Marshall",
+    "brokerFirm": "Horizon Commercial",
+    "motivations": [
+      "estate settlement",
+      "deferred maintenance beyond owner capacity",
+      "code violation remediation pressure",
+      "rising insurance costs"
+    ]
+  },
+
+  "buyer": {
+    "entity": "Bluff City Capital Partners LLC",
+    "contactName": "Marcus Thompson",
+    "contactEmail": "mthompson@example.com",
+    "contactPhone": "901-555-0267"
+  },
+
+  "earnestMoney": {
+    "initialDeposit": 75000,
+    "initialDepositTiming": "Day 1 (PSA execution)",
+    "additionalDeposit": 75000,
+    "additionalDepositTiming": "DD expiration (2025-05-15)",
+    "totalEarnestMoney": 150000,
+    "goesHardDate": "2025-05-15"
+  },
+
+  "renovation": {
+    "$_description": "Detailed renovation plan for repositioning from Class C to Class B-.",
+    "totalBudget": 2000000,
+    "perUnitBudget": 25000,
+    "scope": "full interior renovation and selective exterior upgrades",
+    "interiorScope": [
+      "new flooring (LVP throughout)",
+      "updated kitchen cabinets and countertops",
+      "new appliances (stainless steel package)",
+      "updated bathroom fixtures and vanities",
+      "fresh paint (modern color palette)",
+      "new lighting fixtures",
+      "updated electrical panels where needed"
+    ],
+    "exteriorScope": [
+      "new roofing (Buildings 1, 3, 4)",
+      "parking lot resurfacing and restriping",
+      "exterior paint and siding repair",
+      "landscaping refresh",
+      "new signage and wayfinding",
+      "security lighting upgrades",
+      "fencing repair and replacement"
+    ],
+    "commonAreaScope": [
+      "renovated laundry facility with new machines",
+      "new playground equipment",
+      "add dog park",
+      "add package lockers",
+      "management office renovation"
+    ],
+    "timelineMonths": 18,
+    "phasingStrategy": "Rolling renovation - 10-15 units at a time, maintaining occupancy above 65% during construction",
+    "targetPostRenovRent": {
+      "1BR/1BA": 950,
+      "2BR/1BA": 1150,
+      "3BR/2BA": 1400
+    }
+  },
+
+  "timeline": {
+    "loiDate": "2025-03-15",
+    "psaExecutionDate": "2025-04-01",
+    "ddStartDate": "2025-04-01",
+    "ddExpirationDate": "2025-05-15",
+    "financingCommitmentDeadline": "2025-06-01",
+    "closingDate": "2025-06-30",
+    "extensionOptions": [
+      {
+        "type": "dd",
+        "days": 15,
+        "cost": 25000,
+        "description": "Due diligence extension - 15 days for additional $25K earnest money"
+      },
+      {
+        "type": "closing",
+        "days": 30,
+        "cost": 50000,
+        "description": "Closing extension - 30 days for additional $50K earnest money"
+      }
+    ]
+  },
+
+  "keyMetrics": {
+    "$_description": "Pre-calculated key metrics for quick reference.",
+    "inPlaceCapRate": 0.065,
+    "proFormaCapRate": 0.12,
+    "stabilizedCapRate": 0.085,
+    "grossRentMultiplier": 7.69,
+    "expenseRatio": 0.50,
+    "breakEvenOccupancy": 0.65,
+    "pricePerSqFt": 75.00,
+    "rentPerSqFt": 0.97,
+    "lossToLease": 0.175,
+    "grossPotentialRent": 816000,
+    "totalProjectCost": 7146000,
+    "totalProjectCostBreakdown": {
+      "acquisitionPrice": 4800000,
+      "renovationBudget": 2000000,
+      "closingCosts": 96000,
+      "capExReserves": 250000
+    }
+  },
+
+  "riskFactors": [
+    "Environmental contamination risk due to property age (1972) - Phase I and possible Phase II required",
+    "Lead-based paint and asbestos likely present - abatement budget included in renovation",
+    "Existing code violations must be remediated within 90 days of closing",
+    "Flood zone proximity - verify FEMA mapping and insurance requirements",
+    "Tenant relocation costs during renovation - budget $2,500/unit temporary relocation",
+    "Bridge loan maturity risk - must stabilize and refinance within 3 years",
+    "Crime and safety concerns in submarket - budget for security improvements",
+    "Construction cost escalation risk - lock contractor pricing pre-closing"
+  ],
+
+  "notes": "Distressed Class C garden-style complex in South Memphis. Property has been family-owned since 1985 with minimal capital investment over the past 15 years. Current owner passed away and estate is liquidating. Significant deferred maintenance including 3 of 5 roofs needing replacement, aged HVAC systems, and outdated electrical in several buildings. 22% vacancy driven by poor condition, not market weakness. Memphis submarket shows strong workforce housing demand with limited new supply. Repositioning strategy: full interior renovation ($25K/unit) over 18 months with rolling unit turnover. Target rent increase of 35-50% post-renovation, repositioning from Class C to solid B-. Bridge financing with renovation holdback; plan to refinance into Agency permanent debt at month 24-30 once stabilized at 90%+ occupancy. Key risk: environmental due to age - budget includes $75K contingency for abatement. Exit strategy: Agency refinance and hold, or sell at 6.5% cap to value-add buyer at Year 5."
+}

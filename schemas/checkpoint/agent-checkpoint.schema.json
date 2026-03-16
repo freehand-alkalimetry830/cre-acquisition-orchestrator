@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "checkpoint/agent-checkpoint.schema.json",
+  "title": "Agent Checkpoint",
+  "type": "object",
+  "required": [
+    "agentName",
+    "phase",
+    "dealId",
+    "status",
+    "progress",
+    "lastUpdatedAt",
+    "outputs",
+    "redFlags",
+    "dataGaps"
+  ],
+  "properties": {
+    "agentName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "phase": {
+      "type": "string",
+      "minLength": 1
+    },
+    "dealId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "running", "complete", "failed", "skipped"]
+    },
+    "progress": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "startedAt": {
+      "type": ["string", "null"]
+    },
+    "completedAt": {
+      "type": ["string", "null"]
+    },
+    "lastUpdatedAt": {
+      "type": "string"
+    },
+    "resumePoint": {
+      "type": ["string", "null"]
+    },
+    "outputs": {
+      "type": "object",
+      "required": ["summary", "findings", "metrics", "verdict"],
+      "properties": {
+        "summary": { "type": "string" },
+        "findings": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "metrics": { "type": "object" },
+        "verdict": {
+          "type": ["string", "null"]
+        }
+      },
+      "additionalProperties": true
+    },
+    "dataGaps": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "errors": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "redFlags": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "childAgents": {
+      "type": "array",
+      "items": { "type": "object" }
+    }
+  },
+  "additionalProperties": true
+}

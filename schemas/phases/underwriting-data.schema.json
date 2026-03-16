@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "phases/underwriting-data.schema.json",
+  "title": "Underwriting Downstream Data",
+  "type": "object",
+  "required": [
+    "baseCase",
+    "scenarioSummary",
+    "debtSizing",
+    "capExBudget",
+    "proForma",
+    "returnMetrics",
+    "agentFindings",
+    "riskScore",
+    "redFlagCount",
+    "dataGapCount"
+  ],
+  "properties": {
+    "baseCase": {
+      "type": "object",
+      "required": [
+        "purchasePrice",
+        "totalBasis",
+        "goingInCapRate",
+        "year1NOI",
+        "stabilizedNOI",
+        "leveragedIRR",
+        "equityMultiple",
+        "equityRequired"
+      ],
+      "properties": {
+        "purchasePrice": { "type": "number" },
+        "totalBasis": { "type": "number" },
+        "goingInCapRate": { "type": "number" },
+        "year1NOI": { "type": "number" },
+        "stabilizedNOI": { "type": "number" },
+        "leveragedIRR": { "type": "number" },
+        "equityMultiple": { "type": "number" },
+        "equityRequired": { "type": "number" }
+      },
+      "additionalProperties": true
+    },
+    "scenarioSummary": {
+      "type": "object",
+      "required": ["baseIRR", "worstIRR", "bestIRR", "passRate"],
+      "properties": {
+        "baseIRR": { "type": "number" },
+        "worstIRR": { "type": "number" },
+        "bestIRR": { "type": "number" },
+        "passRate": { "type": "number" }
+      },
+      "additionalProperties": true
+    },
+    "debtSizing": {
+      "type": "object",
+      "required": ["requestedLoanAmount", "maxLTV", "interestRate"],
+      "properties": {
+        "requestedLoanAmount": { "type": "number" },
+        "maxLTV": { "type": "number" },
+        "interestRate": { "type": "number" }
+      },
+      "additionalProperties": true
+    },
+    "capExBudget": {
+      "type": "object",
+      "required": ["total5Year"],
+      "properties": {
+        "total5Year": { "type": "number" }
+      },
+      "additionalProperties": true
+    },
+    "proForma": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "returnMetrics": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "agentFindings": {
+      "type": "object"
+    },
+    "riskScore": {
+      "type": "number"
+    },
+    "redFlagCount": {
+      "type": "number",
+      "minimum": 0
+    },
+    "dataGapCount": {
+      "type": "number",
+      "minimum": 0
+    }
+  },
+  "additionalProperties": true
+}

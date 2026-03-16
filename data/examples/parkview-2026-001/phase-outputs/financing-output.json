@@ -1,0 +1,135 @@
+{
+  "selectedLender": "Freddie Mac",
+  "selectedLenderFull": "Freddie Mac (AGENCY)",
+  "loanAmount": 24000000,
+  "ltv": 0.75,
+  "rate": 0.061,
+  "rateType": "Fixed",
+  "term": 10,
+  "amortization": 30,
+  "interestOnlyMonths": 24,
+  "annualDebtServiceIO": 1464000,
+  "annualDebtServiceAmort": 1745265,
+  "dscrIO": 1.35,
+  "dscrAmort": 1.132,
+  "dscrCovenant": 1.2,
+  "prepayment": "Yield maintenance",
+  "recourse": "Non-recourse",
+  "reserves": {
+    "taxMonthly": 37135,
+    "insuranceMonthly": 9583,
+    "capexMonthly": 40000,
+    "renovationEscrow": 700000
+  },
+  "lenderComparison": [
+    {
+      "rank": 1,
+      "lender": "Freddie Mac",
+      "category": "agency",
+      "ltv": "74.7%",
+      "ltvValue": 0.7639,
+      "rate": "5.89%",
+      "rateValue": 0.05986,
+      "term": "10y",
+      "io": "24m",
+      "dscrIO": "1.34x",
+      "dscrIOValue": 1.427,
+      "status": "SELECTED"
+    },
+    {
+      "rank": 2,
+      "lender": "Fannie Mae",
+      "category": "agency",
+      "ltv": "72.2%",
+      "ltvValue": 0.7369,
+      "rate": "5.993%",
+      "rateValue": 0.06149,
+      "term": "10y",
+      "io": "18m",
+      "dscrIO": "1.33x",
+      "dscrIOValue": 1.379,
+      "status": "REVIEWED"
+    },
+    {
+      "rank": 3,
+      "lender": "Harbor CMBS",
+      "category": "cmbs",
+      "ltv": "76.9%",
+      "ltvValue": 0.7607,
+      "rate": "6.251%",
+      "rateValue": 0.06277,
+      "term": "10y",
+      "io": "0m",
+      "dscrIO": "1.38x",
+      "dscrIOValue": 1.276,
+      "status": "REVIEWED"
+    },
+    {
+      "rank": 4,
+      "lender": "Regional Bank Group",
+      "category": "bank",
+      "ltv": "74.5%",
+      "ltvValue": 0.739,
+      "rate": "6.325%",
+      "rateValue": 0.06277,
+      "term": "10y",
+      "io": "12m",
+      "dscrIO": "1.3x",
+      "dscrIOValue": 1.273,
+      "status": "REVIEWED"
+    },
+    {
+      "rank": 5,
+      "lender": "Bridgeline Capital",
+      "category": "bridge",
+      "ltv": "76.6%",
+      "ltvValue": 0.7566,
+      "rate": "6.943%",
+      "rateValue": 0.0678,
+      "term": "10y",
+      "io": "36m",
+      "dscrIO": "1.33x",
+      "dscrIOValue": 1.37,
+      "status": "REVIEWED"
+    }
+  ],
+  "quotesReceived": 5,
+  "bestQuote": {
+    "lenderName": "Freddie Mac",
+    "category": "agency",
+    "interestRate": 0.05986,
+    "ltv": 0.7639,
+    "loanAmount": 24444800,
+    "dscr": 1.427
+  },
+  "riskScore": 75,
+  "redFlagCount": 1,
+  "dataGapCount": 0,
+  "redFlags": [
+    {
+      "id": "fin-dscr",
+      "severity": "HIGH",
+      "category": "FINANCING",
+      "message": "Amortizing DSCR 1.13x is tight",
+      "impact": "Could reduce certainty of execution",
+      "owner": "quote-comparator",
+      "status": "OPEN",
+      "createdAt": "2026-02-24T01:21:41.593Z"
+    }
+  ],
+  "dataGaps": [],
+  "agentFindings": {
+    "lender-outreach": {
+      "status": "COMPLETE",
+      "finding": "Collected 5 lender indications."
+    },
+    "quote-comparator": {
+      "status": "COMPLETE",
+      "finding": "Selected Freddie Mac based on weighted ranking."
+    },
+    "term-sheet-builder": {
+      "status": "COMPLETE",
+      "finding": "Term sheet generated with covenant and timeline package."
+    }
+  }
+}

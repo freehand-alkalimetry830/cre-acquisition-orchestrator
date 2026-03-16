@@ -1,0 +1,162 @@
+{
+  "$schema": "Deal Configuration - Core-Plus Multifamily Example",
+  "$_description": "Stabilized, lower-risk core-plus acquisition. Class A, institutional-quality asset in a strong market with modest upside from common area renovations and rent bumps.",
+
+  "dealId": "DEAL-2025-002",
+  "dealName": "Willow Creek Apartments",
+
+  "property": {
+    "address": "8500 East Hampden Avenue",
+    "city": "Denver",
+    "state": "CO",
+    "zip": "80231",
+    "county": "Arapahoe",
+    "propertyType": "multifamily",
+    "yearBuilt": 2015,
+    "totalUnits": 120,
+    "totalSqFt": 132000,
+    "avgUnitSqFt": 1100,
+    "stories": 4,
+    "buildings": 2,
+    "parking": {
+      "type": "garage",
+      "spaces": 180
+    },
+    "amenities": [
+      "resort-style pool",
+      "state-of-the-art fitness center",
+      "rooftop deck",
+      "co-working lounge",
+      "pet spa",
+      "bike storage",
+      "EV charging stations",
+      "package room",
+      "controlled access",
+      "in-unit washer/dryer"
+    ],
+    "unitMix": {
+      "$description": "Array of unit types with count and rent",
+      "types": [
+        {
+          "type": "1BR/1BA",
+          "count": 40,
+          "avgSqFt": 825,
+          "marketRent": 1850,
+          "inPlaceRent": 1800
+        },
+        {
+          "type": "2BR/2BA",
+          "count": 55,
+          "avgSqFt": 1150,
+          "marketRent": 2350,
+          "inPlaceRent": 2275
+        },
+        {
+          "type": "3BR/2BA",
+          "count": 25,
+          "avgSqFt": 1450,
+          "marketRent": 2900,
+          "inPlaceRent": 2825
+        }
+      ]
+    }
+  },
+
+  "financials": {
+    "askingPrice": 28800000,
+    "pricePerUnit": 240000,
+    "currentNOI": 1584000,
+    "proFormaNOI": 1728000,
+    "inPlaceOccupancy": 0.96,
+    "marketOccupancy": 0.95,
+    "trailingT12Revenue": 3168000,
+    "trailingT12Expenses": 1584000,
+    "capExBudget": 150000,
+    "renovationBudget": 600000,
+    "estimatedClosingCosts": 432000
+  },
+
+  "financing": {
+    "targetLTV": 0.65,
+    "estimatedRate": 0.0525,
+    "loanTerm": 10,
+    "amortization": 30,
+    "loanType": "Agency",
+    "interestOnly": false,
+    "ioPeriod": 0
+  },
+
+  "investmentStrategy": "core-plus",
+  "strategyOptions": ["core", "core-plus", "value-add", "opportunistic"],
+  "targetHoldPeriod": 7,
+  "targetIRR": 0.12,
+  "targetEquityMultiple": 1.7,
+  "targetCashOnCash": 0.065,
+
+  "seller": {
+    "name": "David Richardson",
+    "entity": "Mile High Residential Partners LP",
+    "broker": "Amanda Clark",
+    "brokerFirm": "Apex Capital Markets",
+    "motivations": [
+      "fund lifecycle expiration",
+      "strong market conditions for disposition",
+      "capital recycling into ground-up development"
+    ]
+  },
+
+  "buyer": {
+    "entity": "Rocky Mountain Investment Group LLC",
+    "contactName": "Jennifer Park",
+    "contactEmail": "jpark@example.com",
+    "contactPhone": "303-555-0198"
+  },
+
+  "earnestMoney": {
+    "initialDeposit": 400000,
+    "initialDepositTiming": "Day 1 (PSA execution)",
+    "additionalDeposit": 400000,
+    "additionalDepositTiming": "DD expiration (2025-04-10)",
+    "totalEarnestMoney": 800000,
+    "goesHardDate": "2025-04-10"
+  },
+
+  "timeline": {
+    "loiDate": "2025-02-10",
+    "psaExecutionDate": "2025-02-25",
+    "ddStartDate": "2025-02-25",
+    "ddExpirationDate": "2025-04-10",
+    "financingCommitmentDeadline": "2025-04-25",
+    "closingDate": "2025-05-25",
+    "extensionOptions": [
+      {
+        "type": "dd",
+        "days": 15,
+        "cost": 50000,
+        "description": "Due diligence extension - 15 days for additional $50K earnest money"
+      },
+      {
+        "type": "closing",
+        "days": 15,
+        "cost": 75000,
+        "description": "Closing extension - 15 days for additional $75K earnest money"
+      }
+    ]
+  },
+
+  "keyMetrics": {
+    "$_description": "Pre-calculated key metrics for quick reference.",
+    "inPlaceCapRate": 0.055,
+    "proFormaCapRate": 0.06,
+    "grossRentMultiplier": 9.09,
+    "expenseRatio": 0.50,
+    "debtServiceCoverageRatio": 1.52,
+    "breakEvenOccupancy": 0.78,
+    "pricePerSqFt": 218.18,
+    "rentPerSqFt": 2.14,
+    "lossToLease": 0.032,
+    "grossPotentialRent": 3192000
+  },
+
+  "notes": "Institutional-quality Class A asset in Denver's southeast suburban corridor. Built in 2015 with modern finishes and strong curb appeal. Core-plus strategy focuses on refreshing common area amenities (lobby, pool area, fitness center) and implementing RUBS (Ratio Utility Billing System) to drive NOI growth. Current owner is a closed-end fund approaching end of life, creating motivation for clean execution. Submarket fundamentals strong with 2.5% population growth, proximity to Denver Tech Center employment hub, and limited new supply pipeline. Property is 96% occupied with below-market rents on 40% of units due to legacy leases. Expect $50-75/unit rent bumps on turnover with minimal capital investment."
+}

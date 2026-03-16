@@ -1,0 +1,34 @@
+{
+  "$schema": "Runtime configuration for autonomous local MVP",
+  "mode": "simulated-autonomous",
+  "defaultScenario": "core-plus",
+  "defaultSeed": 42,
+  "execution": {
+    "concurrency": {
+      "phase": 1,
+      "agentsPerPhase": 4
+    },
+    "timeoutsMs": {
+      "agent": 20000,
+      "phase": 120000
+    },
+    "retryPolicy": {
+      "maxAttempts": 2,
+      "baseDelayMs": 500
+    },
+    "speedProfile": "normal"
+  },
+  "logging": {
+    "categories": ["ACTION", "FINDING", "INFO", "PHASE", "ERROR", "DATA_GAP", "COMPLETE"],
+    "emitStructuredEvents": true
+  },
+  "validation": {
+    "strictSchemas": true,
+    "blockOnContractMismatch": true
+  },
+  "output": {
+    "writePhaseOutputs": true,
+    "writeAgentCheckpoints": true,
+    "writeEvents": true
+  }
+}

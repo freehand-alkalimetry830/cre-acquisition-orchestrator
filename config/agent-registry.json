@@ -1,0 +1,215 @@
+{
+  "$schema": "Agent Registry - Maps agent names to prompt file paths",
+  "orchestrators": {
+    "master-orchestrator": "orchestrators/master-orchestrator.md",
+    "due-diligence-orchestrator": "orchestrators/due-diligence-orchestrator.md",
+    "underwriting-orchestrator": "orchestrators/underwriting-orchestrator.md",
+    "financing-orchestrator": "orchestrators/financing-orchestrator.md",
+    "legal-orchestrator": "orchestrators/legal-orchestrator.md",
+    "closing-orchestrator": "orchestrators/closing-orchestrator.md"
+  },
+  "agents": {
+    "due-diligence": {
+      "rent-roll-analyst": {
+        "file": "agents/due-diligence/rent-roll-analyst.md",
+        "inputs": ["config/deal.json", "rent roll document"],
+        "outputs": ["rent-roll analysis", "unit mix summary", "loss-to-lease calculation"],
+        "phase": "due-diligence",
+        "critical": true,
+        "dependencies": []
+      },
+      "opex-analyst": {
+        "file": "agents/due-diligence/opex-analyst.md",
+        "inputs": ["config/deal.json", "T-12 operating statement"],
+        "outputs": ["opex analysis", "per-unit expenses", "anomaly flags"],
+        "phase": "due-diligence",
+        "critical": true,
+        "dependencies": []
+      },
+      "physical-inspection": {
+        "file": "agents/due-diligence/physical-inspection.md",
+        "inputs": ["config/deal.json", "inspection reports"],
+        "outputs": ["physical condition report", "capex estimates"],
+        "phase": "due-diligence",
+        "critical": true,
+        "dependencies": []
+      },
+      "market-study": {
+        "file": "agents/due-diligence/market-study.md",
+        "inputs": ["config/deal.json", "market data"],
+        "outputs": ["market analysis", "comp set", "rent comps"],
+        "phase": "due-diligence",
+        "critical": true,
+        "dependencies": []
+      },
+      "environmental-review": {
+        "file": "agents/due-diligence/environmental-review.md",
+        "inputs": ["config/deal.json", "Phase I ESA"],
+        "outputs": ["environmental assessment", "remediation needs"],
+        "phase": "due-diligence",
+        "critical": true,
+        "dependencies": []
+      },
+      "legal-title-review": {
+        "file": "agents/due-diligence/legal-title-review.md",
+        "inputs": ["config/deal.json", "title commitment", "survey"],
+        "outputs": ["title analysis", "exception review", "encumbrances"],
+        "phase": "due-diligence",
+        "critical": true,
+        "dependencies": []
+      },
+      "tenant-credit": {
+        "file": "agents/due-diligence/tenant-credit.md",
+        "inputs": ["config/deal.json", "tenant financial data", "rent roll"],
+        "outputs": ["tenant credit analysis", "concentration risk"],
+        "phase": "due-diligence",
+        "critical": false,
+        "dependencies": ["rent-roll-analyst"]
+      }
+    },
+    "underwriting": {
+      "financial-model-builder": {
+        "file": "agents/underwriting/financial-model-builder.md",
+        "inputs": ["config/deal.json", "all due-diligence outputs"],
+        "outputs": ["base case financial model", "pro forma"],
+        "phase": "underwriting",
+        "critical": true,
+        "dependencies": ["rent-roll-analyst", "opex-analyst", "physical-inspection", "market-study", "environmental-review", "legal-title-review", "tenant-credit"]
+      },
+      "scenario-analyst": {
+        "file": "agents/underwriting/scenario-analyst.md",
+        "inputs": ["config/deal.json", "base case financial model"],
+        "outputs": ["27 scenario analyses", "sensitivity results"],
+        "phase": "underwriting",
+        "critical": true,
+        "dependencies": ["financial-model-builder"]
+      },
+      "ic-memo-writer": {
+        "file": "agents/underwriting/ic-memo-writer.md",
+        "inputs": ["config/deal.json", "all due-diligence outputs", "all underwriting outputs"],
+        "outputs": ["investment committee memo"],
+        "phase": "underwriting",
+        "critical": true,
+        "dependencies": ["financial-model-builder", "scenario-analyst"]
+      }
+    },
+    "financing": {
+      "lender-outreach": {
+        "file": "agents/financing/lender-outreach.md",
+        "inputs": ["config/deal.json", "underwriting outputs"],
+        "outputs": ["lender list", "outreach results", "initial quotes"],
+        "phase": "financing",
+        "critical": true,
+        "dependencies": []
+      },
+      "quote-comparator": {
+        "file": "agents/financing/quote-comparator.md",
+        "inputs": ["config/deal.json", "lender quotes"],
+        "outputs": ["quote comparison matrix", "recommendation"],
+        "phase": "financing",
+        "critical": true,
+        "dependencies": ["lender-outreach"]
+      },
+      "term-sheet-builder": {
+        "file": "agents/financing/term-sheet-builder.md",
+        "inputs": ["config/deal.json", "selected quote"],
+        "outputs": ["term sheet draft", "negotiation points"],
+        "phase": "financing",
+        "critical": true,
+        "dependencies": ["quote-comparator"]
+      }
+    },
+    "legal": {
+      "psa-reviewer": {
+        "file": "agents/legal/psa-reviewer.md",
+        "inputs": ["config/deal.json", "PSA document"],
+        "outputs": ["PSA analysis", "risk flags", "deadline calendar"],
+        "phase": "legal",
+        "critical": true,
+        "dependencies": []
+      },
+      "title-survey-reviewer": {
+        "file": "agents/legal/title-survey-reviewer.md",
+        "inputs": ["config/deal.json", "title commitment", "survey", "due-diligence title output"],
+        "outputs": ["title/survey review", "exception analysis"],
+        "phase": "legal",
+        "critical": true,
+        "dependencies": []
+      },
+      "estoppel-tracker": {
+        "file": "agents/legal/estoppel-tracker.md",
+        "inputs": ["config/deal.json", "rent roll", "tenant list"],
+        "outputs": ["estoppel status tracking", "discrepancy flags"],
+        "phase": "legal",
+        "critical": true,
+        "dependencies": []
+      },
+      "loan-doc-reviewer": {
+        "file": "agents/legal/loan-doc-reviewer.md",
+        "inputs": ["config/deal.json", "loan documents", "financing outputs"],
+        "outputs": ["loan doc review", "compliance check"],
+        "phase": "legal",
+        "critical": true,
+        "dependencies": []
+      },
+      "insurance-coordinator": {
+        "file": "agents/legal/insurance-coordinator.md",
+        "inputs": ["config/deal.json", "insurance requirements", "property data"],
+        "outputs": ["insurance compliance", "coverage verification"],
+        "phase": "legal",
+        "critical": false,
+        "dependencies": []
+      },
+      "transfer-doc-preparer": {
+        "file": "agents/legal/transfer-doc-preparer.md",
+        "inputs": ["config/deal.json", "entity docs", "deal terms"],
+        "outputs": ["transfer document drafts", "entity verification"],
+        "phase": "legal",
+        "critical": false,
+        "dependencies": []
+      }
+    },
+    "closing": {
+      "closing-coordinator": {
+        "file": "agents/closing/closing-coordinator.md",
+        "inputs": ["config/deal.json", "all prior phase outputs"],
+        "outputs": ["closing checklist", "readiness assessment"],
+        "phase": "closing",
+        "critical": true,
+        "dependencies": ["psa-reviewer", "title-survey-reviewer", "estoppel-tracker", "loan-doc-reviewer", "insurance-coordinator", "transfer-doc-preparer"]
+      },
+      "funds-flow-manager": {
+        "file": "agents/closing/funds-flow-manager.md",
+        "inputs": ["config/deal.json", "loan terms", "purchase price", "prorations"],
+        "outputs": ["funds flow memo", "wire instructions"],
+        "phase": "closing",
+        "critical": true,
+        "dependencies": ["closing-coordinator"]
+      }
+    }
+  },
+  "skills": {
+    "logging-protocol": "skills/logging-protocol.md",
+    "checkpoint-protocol": "skills/checkpoint-protocol.md",
+    "underwriting-calc": "skills/underwriting-calc.md",
+    "risk-scoring": "skills/risk-scoring.md",
+    "multifamily-benchmarks": "skills/multifamily-benchmarks.md",
+    "lender-criteria": "skills/lender-criteria.md",
+    "legal-checklist": "skills/legal-checklist.md"
+  },
+  "templates": {
+    "agent-checkpoint": "templates/agent-checkpoint.json",
+    "phase-checkpoint": "templates/phase-checkpoint.json",
+    "report-template": "templates/report-template.md",
+    "ic-memo-template": "templates/ic-memo-template.md"
+  },
+  "validation": {
+    "test-deal": "validation/test-deal.json",
+    "validation-runner": "validation/validation-runner.md"
+  },
+  "totalAgents": {
+    "orchestrators": 6,
+    "specialists": 21,
+    "total": 27
+  }
+}

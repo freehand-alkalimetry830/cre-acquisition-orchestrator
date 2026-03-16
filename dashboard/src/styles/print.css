@@ -1,0 +1,221 @@
+/* ---------------------------------------------------------------------------
+   Print styles for the CRE Acquisition Final Report
+   Triggered via window.print() from the Print Report button.
+   --------------------------------------------------------------------------- */
+
+@media print {
+  /* ---- Page setup ---- */
+  @page {
+    size: letter portrait;
+    margin: 0.75in 0.75in 1in 0.75in;
+  }
+
+  /* ---- Reset dark theme for print ---- */
+  body,
+  html {
+    background: #ffffff !important;
+    color: #111827 !important;
+    font-size: 11pt;
+    line-height: 1.5;
+  }
+
+  /* ---- Hide non-report elements ---- */
+  header,
+  .tab,
+  .tab-active,
+  .tab-inactive,
+  [class*="reconnect"],
+  [class*="no-print"],
+  button,
+  nav {
+    display: none !important;
+  }
+
+  /* Show only the print button area's hidden print-only elements */
+  .print-only {
+    display: block !important;
+  }
+
+  /* ---- Main container: remove padding constraints ---- */
+  main {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* ---- Cards & surfaces: flatten for print ---- */
+  .card,
+  [class*="bg-cre-surface"],
+  [class*="bg-cre-bg"] {
+    background: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    box-shadow: none !important;
+    color: #111827 !important;
+  }
+
+  /* ---- Text colors: ensure readability on white ---- */
+  [class*="text-gray-100"],
+  [class*="text-gray-200"],
+  [class*="text-gray-300"],
+  [class*="text-white"] {
+    color: #111827 !important;
+  }
+
+  [class*="text-gray-400"],
+  [class*="text-gray-500"] {
+    color: #4b5563 !important;
+  }
+
+  /* ---- Status badges: print-friendly colors ---- */
+  .status-badge {
+    border: 1px solid currentColor !important;
+    background: transparent !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .status-complete {
+    color: #059669 !important;
+    border-color: #059669 !important;
+  }
+
+  .status-failed {
+    color: #dc2626 !important;
+    border-color: #dc2626 !important;
+  }
+
+  .status-running {
+    color: #2563eb !important;
+    border-color: #2563eb !important;
+  }
+
+  .status-pending {
+    color: #6b7280 !important;
+    border-color: #6b7280 !important;
+  }
+
+  /* ---- Red flags, findings, data gaps: preserve left border colors ---- */
+  .red-flag {
+    background: #fef2f2 !important;
+    border-left-color: #dc2626 !important;
+    color: #111827 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .finding {
+    background: #f0fdf4 !important;
+    border-left-color: #059669 !important;
+    color: #111827 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .data-gap {
+    background: #fffbeb !important;
+    border-left-color: #d97706 !important;
+    color: #111827 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ---- Progress bars: print with exact colors ---- */
+  .progress-bar {
+    background: #e5e7eb !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .progress-fill {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ---- Tables: clean borders ---- */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th,
+  td {
+    border: 1px solid #d1d5db !important;
+    padding: 6px 10px;
+    color: #111827 !important;
+    background: #ffffff !important;
+  }
+
+  th {
+    background: #f3f4f6 !important;
+    font-weight: 600;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ---- Page breaks: avoid breaking inside cards/sections ---- */
+  .card,
+  section,
+  [class*="space-y-"] > div {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Allow explicit page breaks before major sections */
+  .print-page-break {
+    page-break-before: always;
+    break-before: page;
+  }
+
+  /* ---- Links: show URL in print ---- */
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #6b7280;
+  }
+
+  /* ---- Remove animations ---- */
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* ---- Verdict badges: preserve meaningful color ---- */
+  [class*="bg-cre-success"] {
+    background: #ecfdf5 !important;
+    color: #059669 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  [class*="bg-cre-danger"] {
+    background: #fef2f2 !important;
+    color: #dc2626 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  [class*="bg-cre-warning"] {
+    background: #fffbeb !important;
+    color: #d97706 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  [class*="bg-cre-info"] {
+    background: #eff6ff !important;
+    color: #2563eb !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ---- Footer: page numbers ---- */
+  @page {
+    @bottom-center {
+      content: "Page " counter(page) " of " counter(pages);
+      font-size: 9pt;
+      color: #6b7280;
+    }
+  }
+}

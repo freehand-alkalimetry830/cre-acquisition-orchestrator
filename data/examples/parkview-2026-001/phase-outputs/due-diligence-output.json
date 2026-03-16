@@ -1,0 +1,203 @@
+{
+  "propertyName": "Parkview Apartments",
+  "yearBuilt": 1998,
+  "construction": "Updated Frame",
+  "currentOwner": "Texas LLC",
+  "occupancy": 0.94,
+  "zoningCompliant": true,
+  "zoning": "MF-24",
+  "unitMix": [
+    {
+      "type": "1BR/1BA",
+      "count": 80,
+      "avgSqFt": 725,
+      "marketRent": 1350,
+      "inPlaceRent": 1225
+    },
+    {
+      "type": "2BR/1BA",
+      "count": 40,
+      "avgSqFt": 900,
+      "marketRent": 1600,
+      "inPlaceRent": 1450
+    },
+    {
+      "type": "2BR/2BA",
+      "count": 60,
+      "avgSqFt": 1050,
+      "marketRent": 1800,
+      "inPlaceRent": 1650
+    },
+    {
+      "type": "3BR/2BA",
+      "count": 20,
+      "avgSqFt": 1200,
+      "marketRent": 2100,
+      "inPlaceRent": 1900
+    }
+  ],
+  "avgInPlaceRent": 1513,
+  "avgMarketRent": 1694,
+  "lossToLease": 407184,
+  "lossToLeasePct": 0.1066,
+  "pricePerUnit": 160000,
+  "marketPPU": 192948,
+  "populationGrowth": 0.0271,
+  "supplyPipeline": "Moderate supply pipeline",
+  "jurisdiction": "Favorable jurisdiction",
+  "rentControl": false,
+  "renovationBudget": 2000000,
+  "renovationPerUnit": 10000,
+  "marketVacancy": 0.0738,
+  "supplyDelivered2025": 1067,
+  "supplyForecast2026": "2210 units",
+  "absorptionNote": "Absorption remains healthy across comparable assets.",
+  "marketCycle": "Stable expansion",
+  "rentGrowthTrailing": 0.031,
+  "rentGrowthForecast": 0.033,
+  "environmentalRisk": "Manageable",
+  "floodZone": "X",
+  "opexBenchmark": "42.1% expense ratio",
+  "opexBreakdown": [
+    {
+      "category": "Taxes",
+      "amount": 445625,
+      "pct": 0.31
+    },
+    {
+      "category": "Insurance",
+      "amount": 115000,
+      "pct": 0.08
+    },
+    {
+      "category": "Utilities",
+      "amount": 186875,
+      "pct": 0.13
+    },
+    {
+      "category": "Repairs",
+      "amount": 230000,
+      "pct": 0.16
+    },
+    {
+      "category": "Payroll",
+      "amount": 244375,
+      "pct": 0.17
+    },
+    {
+      "category": "Other",
+      "amount": 215625,
+      "pct": 0.15
+    }
+  ],
+  "rentRoll": {
+    "totalUnits": 200,
+    "occupancy": 0.94,
+    "avgRent": 1513,
+    "avgMarketRent": 1694,
+    "lossToLease": 407184,
+    "lossToLeasePercent": 0.1066
+  },
+  "expenses": {
+    "totalOpEx": 1437500,
+    "opExPerUnit": 7188,
+    "opExRatio": 0.4211,
+    "adjustedExpenses": {
+      "taxes": 445625,
+      "insurance": 115000,
+      "utilities": 186875,
+      "repairs": 230000,
+      "management": 129375,
+      "payroll": 244375,
+      "admin": 43125,
+      "marketing": 28750,
+      "contractServices": 14375,
+      "other": 14375
+    }
+  },
+  "physical": {
+    "condition": "GOOD",
+    "conditionScore": 82,
+    "capExTotal5Year": 2400000
+  },
+  "title": {
+    "status": "CLEAR",
+    "zoningCompliance": "COMPLIANT"
+  },
+  "market": {
+    "submarket": "Austin Submarket",
+    "capRateRange": {
+      "low": 0.05,
+      "mid": 0.056,
+      "high": 0.065
+    },
+    "populationGrowth": 0.0271,
+    "rentGrowthTrailing12": 0.031,
+    "rentGrowthProjected": 0.035
+  },
+  "tenants": {
+    "creditSummary": "Stable tenant profile",
+    "concentrationRisk": "LOW",
+    "delinquencyRate": 0.0311
+  },
+  "environmental": {
+    "phase1Status": "CLEAN",
+    "floodZone": "X",
+    "regulatoryCompliance": "COMPLIANT"
+  },
+  "marketDetail": {
+    "msaPopulation": 5287042,
+    "populationGrowth": 0.0271,
+    "populationGrowthRank": "Top quartile growth market",
+    "jobGrowth": 0.0266,
+    "unemployment": 0.0394,
+    "marketVacancy": 0.0738,
+    "marketPPU": 192948,
+    "marketCapRateRange": "5% - 6.4%",
+    "supplyDelivered2025": 1067,
+    "supplyForecast2026": "2210 units",
+    "absorptionNote": "Absorption remains healthy across comparable assets.",
+    "marketCycle": "Stable expansion",
+    "concessionRate": 0.035,
+    "concessionNote": "Concessions concentrated in newest competitive product.",
+    "rentGrowthTrailing": 0.031,
+    "rentGrowthForecast2026": "2.5% to 4.1%",
+    "rentGrowthLongTerm": 0.03,
+    "sb38Note": "No material permitting bottleneck."
+  },
+  "riskScore": 77,
+  "redFlagCount": 0,
+  "dataGapCount": 0,
+  "redFlags": [],
+  "dataGaps": [],
+  "agentFindings": {
+    "rent-roll-analyst": {
+      "status": "COMPLETE",
+      "finding": "Validated 200 units and rent strata."
+    },
+    "opex-analyst": {
+      "status": "COMPLETE",
+      "finding": "Expense ratio at 42.1%."
+    },
+    "physical-inspection": {
+      "status": "COMPLETE",
+      "finding": "Capex schedule drafted across five-year horizon."
+    },
+    "legal-title-review": {
+      "status": "COMPLETE",
+      "finding": "Title clear with standard exceptions."
+    },
+    "market-study": {
+      "status": "COMPLETE",
+      "finding": "Market cap range 0.05-0.065."
+    },
+    "tenant-credit": {
+      "status": "COMPLETE",
+      "finding": "Tenant delinquency and retention benchmarks evaluated."
+    },
+    "environmental-review": {
+      "status": "COMPLETE",
+      "finding": "No material environmental constraints."
+    }
+  }
+}

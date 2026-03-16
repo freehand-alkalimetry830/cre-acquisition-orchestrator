@@ -1,0 +1,43 @@
+{
+  "$description": "Expected output structure from Financing phase on test deal",
+  "phaseVerdict": "PASS",
+  "confidence": 85,
+  "expectedAgentCount": 3,
+  "expectedAgents": [
+    "lender-outreach",
+    "quote-comparator",
+    "term-sheet-builder"
+  ],
+  "expectedMetrics": {
+    "lendersSurveyed": { "min": 6, "max": 12, "unit": "count" },
+    "quotesReceived": { "min": 3, "max": 12, "unit": "count" },
+    "bestRate": { "min": 4.5, "max": 7.5, "unit": "percent" },
+    "maxLTV": { "min": 65, "max": 80, "unit": "percent" },
+    "maxLoanAmount": { "min": 20000000, "max": 26000000, "unit": "dollars" },
+    "bestIOPeriod": { "min": 0, "max": 5, "unit": "years" }
+  },
+  "requiredOutputKeys": [
+    "phaseSummary",
+    "lenderComparison",
+    "recommendedTermSheet",
+    "phaseVerdict",
+    "dataForDownstream"
+  ],
+  "requiredDataForDownstream": [
+    "selectedLender",
+    "loanTerms",
+    "loanAmount",
+    "interestRate",
+    "ioPeriod",
+    "termLength",
+    "amortization",
+    "prepaymentTerms",
+    "covenants"
+  ],
+  "lenderCategories": [
+    "Agency (Fannie/Freddie/FHA)",
+    "CMBS",
+    "Bank/Credit Union",
+    "Bridge/Debt Fund"
+  ]
+}

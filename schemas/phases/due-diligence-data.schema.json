@@ -1,0 +1,116 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "phases/due-diligence-data.schema.json",
+  "title": "Due Diligence Downstream Data",
+  "type": "object",
+  "required": [
+    "rentRoll",
+    "expenses",
+    "physical",
+    "title",
+    "market",
+    "tenants",
+    "environmental",
+    "agentFindings",
+    "riskScore",
+    "redFlagCount",
+    "dataGapCount"
+  ],
+  "properties": {
+    "rentRoll": {
+      "type": "object",
+      "required": ["totalUnits", "occupancy", "avgRent", "avgMarketRent", "lossToLease"],
+      "properties": {
+        "totalUnits": { "type": "number" },
+        "occupancy": { "type": "number" },
+        "avgRent": { "type": "number" },
+        "avgMarketRent": { "type": "number" },
+        "lossToLease": { "type": "number" },
+        "lossToLeasePercent": { "type": "number" }
+      },
+      "additionalProperties": true
+    },
+    "expenses": {
+      "type": "object",
+      "required": ["totalOpEx", "opExPerUnit", "opExRatio", "adjustedExpenses"],
+      "properties": {
+        "totalOpEx": { "type": "number" },
+        "opExPerUnit": { "type": "number" },
+        "opExRatio": { "type": "number" },
+        "adjustedExpenses": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "physical": {
+      "type": "object",
+      "required": ["condition", "conditionScore", "capExTotal5Year"],
+      "properties": {
+        "condition": { "type": "string" },
+        "conditionScore": { "type": "number" },
+        "capExTotal5Year": { "type": "number" }
+      },
+      "additionalProperties": true
+    },
+    "title": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "market": {
+      "type": "object",
+      "required": ["submarket", "capRateRange", "populationGrowth"],
+      "properties": {
+        "submarket": { "type": "string" },
+        "capRateRange": { "type": "object" },
+        "populationGrowth": { "type": "number" }
+      },
+      "additionalProperties": true
+    },
+    "tenants": {
+      "type": "object",
+      "required": ["creditSummary", "concentrationRisk", "delinquencyRate"],
+      "properties": {
+        "creditSummary": { "type": "string" },
+        "concentrationRisk": { "type": "string" },
+        "delinquencyRate": { "type": "number" }
+      },
+      "additionalProperties": true
+    },
+    "environmental": {
+      "type": "object",
+      "required": ["phase1Status", "floodZone", "regulatoryCompliance"],
+      "properties": {
+        "phase1Status": { "type": "string" },
+        "floodZone": { "type": "string" },
+        "regulatoryCompliance": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "agentFindings": {
+      "type": "object"
+    },
+    "riskScore": {
+      "type": "number"
+    },
+    "redFlagCount": {
+      "type": "number",
+      "minimum": 0
+    },
+    "dataGapCount": {
+      "type": "number",
+      "minimum": 0
+    },
+    "redFlags": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "dataGaps": {
+      "type": "array",
+      "items": { "type": "object" }
+    }
+  },
+  "additionalProperties": true
+}

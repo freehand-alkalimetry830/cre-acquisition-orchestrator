@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "common/flag.schema.json",
+  "title": "Structured Flag",
+  "type": "object",
+  "required": [
+    "id",
+    "severity",
+    "category",
+    "message",
+    "impact",
+    "owner",
+    "status",
+    "createdAt"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"]
+    },
+    "category": {
+      "type": "string",
+      "minLength": 1
+    },
+    "message": {
+      "type": "string",
+      "minLength": 1
+    },
+    "impact": {
+      "type": "string",
+      "minLength": 1
+    },
+    "owner": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": ["OPEN", "ACKNOWLEDGED", "MITIGATED", "WAIVED", "CLOSED"]
+    },
+    "createdAt": {
+      "type": "string",
+      "minLength": 10
+    },
+    "updatedAt": {
+      "type": "string"
+    },
+    "evidencePath": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

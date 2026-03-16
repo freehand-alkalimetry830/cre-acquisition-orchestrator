@@ -1,0 +1,350 @@
+{
+  "dealId": "DEAL-2024-001",
+  "dealName": "Parkview Apartments Acquisition",
+  "property": {
+    "name": "Parkview Apartments",
+    "address": "1200 Parkview Drive, Austin, TX 78701",
+    "units": 200,
+    "yearBuilt": 1998,
+    "type": "multifamily",
+    "class": "B"
+  },
+  "strategy": "core-plus",
+  "status": "COMPLETED",
+  "overallProgress": 100,
+  "overallVerdict": "CONDITIONAL",
+  "startedAt": "2024-06-15T08:00:00Z",
+  "completedAt": "2024-06-15T14:30:00Z",
+  "phases": {
+    "dueDiligence": {
+      "status": "COMPLETED",
+      "startedAt": "2024-06-15T08:00:00Z",
+      "completedAt": "2024-06-15T10:15:00Z",
+      "verdict": "CONDITIONAL",
+      "agentStatuses": {
+        "rent-roll-analyst": "COMPLETED",
+        "opex-analyst": "COMPLETED",
+        "physical-inspection": "COMPLETED",
+        "legal-title-review": "COMPLETED",
+        "market-study": "COMPLETED",
+        "tenant-credit": "COMPLETED",
+        "environmental-review": "COMPLETED"
+      },
+      "redFlagCount": 2,
+      "dataGapCount": 1,
+      "riskScore": 78,
+      "dataForDownstream": {
+        "rentRoll": {
+          "totalUnits": 200,
+          "occupancy": 0.93,
+          "avgRent": 1450,
+          "avgMarketRent": 1525,
+          "lossToLease": 15000,
+          "lossToLeasePercent": 0.049,
+          "tenantMix": {
+            "studioCount": 20,
+            "oneBedCount": 80,
+            "twoBedCount": 80,
+            "threeBedCount": 20
+          },
+          "leaseExpirationSchedule": {
+            "2024": 45,
+            "2025": 85,
+            "2026": 50,
+            "2027": 15,
+            "2028": 5
+          },
+          "vacancyTrend": [0.05, 0.06, 0.07, 0.07],
+          "concessions": [
+            {
+              "type": "1 month free",
+              "units": 12,
+              "value": 17400
+            }
+          ]
+        },
+        "expenses": {
+          "totalOpEx": 1440000,
+          "opExPerUnit": 7200,
+          "opExRatio": 0.41,
+          "anomalies": [
+            {
+              "item": "Repair spike Q3",
+              "amount": 45000,
+              "explanation": "Roof repair after storm"
+            }
+          ],
+          "oneTimeItems": [
+            {
+              "item": "Legal settlement",
+              "amount": 22000
+            }
+          ],
+          "adjustedExpenses": {
+            "taxes": 480000,
+            "insurance": 96000,
+            "utilities": 192000,
+            "repairs": 168000,
+            "management": 144000,
+            "payroll": 192000,
+            "admin": 48000,
+            "marketing": 36000,
+            "contractServices": 60000,
+            "other": 24000
+          },
+          "benchmarkComparison": {
+            "vsMarket": "5% below",
+            "vsClass": "in-line"
+          }
+        },
+        "physical": {
+          "condition": "FAIR",
+          "conditionScore": 72,
+          "deferredMaintenance": 680000,
+          "deferredMaintenancePerUnit": 3400,
+          "capExNeeds": [
+            {
+              "item": "Roof replacement - Bldg A",
+              "cost": 180000,
+              "year": 1
+            },
+            {
+              "item": "HVAC units (40)",
+              "cost": 240000,
+              "year": 2
+            },
+            {
+              "item": "Parking lot resurface",
+              "cost": 95000,
+              "year": 3
+            },
+            {
+              "item": "Unit renovations (50 units)",
+              "cost": 500000,
+              "year": 1
+            }
+          ],
+          "capExTotal5Year": 1200000,
+          "majorIssues": [
+            "Roof age on Building A (23 years)",
+            "HVAC units past useful life in 40 units"
+          ],
+          "systemAges": {
+            "roof": { "age": 23, "remainingLife": 2 },
+            "hvac": { "age": 18, "remainingLife": 5 },
+            "plumbing": { "age": 26, "remainingLife": 14 },
+            "electrical": { "age": 26, "remainingLife": 14 }
+          },
+          "immediateRepairs": [
+            {
+              "item": "Roof leak Bldg A, unit 312",
+              "cost": 8500
+            }
+          ]
+        },
+        "title": {
+          "status": "CLEAR",
+          "exceptions": [
+            "Standard utility easements",
+            "HOA covenant (acceptable)"
+          ],
+          "liens": [],
+          "easements": [
+            "10ft utility easement along north boundary"
+          ],
+          "zoningCompliance": "COMPLIANT",
+          "surveyIssues": [],
+          "encumbrances": []
+        },
+        "market": {
+          "submarket": "East Austin",
+          "submarketClass": "B+",
+          "rentGrowthTrailing12": 0.035,
+          "rentGrowthProjected": 0.04,
+          "capRateRange": {
+            "low": 0.050,
+            "mid": 0.055,
+            "high": 0.065
+          },
+          "supplyPipeline": {
+            "unitsUnderConstruction": 1200,
+            "unitsPlanned": 800,
+            "deliveryTimeline": [
+              { "year": 2024, "units": 600 },
+              { "year": 2025, "units": 1400 }
+            ]
+          },
+          "demandDrivers": [
+            "Tech sector growth",
+            "UT Austin expansion",
+            "Population influx from CA"
+          ],
+          "employmentGrowth": 0.032,
+          "populationGrowth": 0.025,
+          "medianHouseholdIncome": 78500,
+          "rentToIncomeRatio": 0.22,
+          "comparableProperties": [
+            {
+              "name": "The Preserve",
+              "units": 180,
+              "avgRent": 1510,
+              "capRate": 0.054
+            },
+            {
+              "name": "Oak Hill Village",
+              "units": 240,
+              "avgRent": 1480,
+              "capRate": 0.058
+            },
+            {
+              "name": "Riverside Commons",
+              "units": 160,
+              "avgRent": 1550,
+              "capRate": 0.052
+            }
+          ]
+        },
+        "tenants": {
+          "creditSummary": "Generally good tenant base with moderate delinquency",
+          "avgCreditScore": 680,
+          "concentrationRisk": "LOW",
+          "topTenantExposure": 0.005,
+          "leaseExpirations": {
+            "year1": 45,
+            "year2": 85,
+            "year3": 50,
+            "year4": 15,
+            "year5": 5
+          },
+          "delinquencyRate": 0.04,
+          "tenantRetentionRate": 0.72
+        },
+        "environmental": {
+          "phase1Status": "CLEAN",
+          "recognizedEnvironmentalConditions": [],
+          "recommendations": [
+            "Standard Phase I monitoring"
+          ],
+          "risks": [],
+          "floodZone": "X",
+          "wetlands": false,
+          "estimatedRemediationCost": 0,
+          "regulatoryCompliance": "COMPLIANT"
+        }
+      }
+    },
+    "underwriting": {
+      "status": "COMPLETED",
+      "startedAt": "2024-06-15T10:15:00Z",
+      "completedAt": "2024-06-15T11:30:00Z",
+      "verdict": "PASS",
+      "agentStatuses": {
+        "financial-model-builder": "COMPLETED",
+        "scenario-analyst": "COMPLETED",
+        "ic-memo-writer": "COMPLETED"
+      },
+      "redFlagCount": 0,
+      "dataGapCount": 0,
+      "riskScore": 82,
+      "dataForDownstream": {
+        "financialModel": {
+          "purchasePrice": 32000000,
+          "pricePerUnit": 160000,
+          "noi": 2064000,
+          "capRate": 0.0645,
+          "dscr": 1.35,
+          "ltv": 0.70,
+          "cashOnCash": 0.092,
+          "irr": 0.168,
+          "equityMultiple": 2.1,
+          "debtYield": 0.092,
+          "debtService": 1529000
+        },
+        "scenarios": {
+          "totalScenarios": 27,
+          "scenariosPassingAll": 22,
+          "baseCaseIRR": 0.168,
+          "worstCaseIRR": 0.089,
+          "bestCaseIRR": 0.245
+        },
+        "recommendation": "APPROVE"
+      }
+    },
+    "financing": {
+      "status": "COMPLETED",
+      "startedAt": "2024-06-15T11:30:00Z",
+      "completedAt": "2024-06-15T12:30:00Z",
+      "verdict": "PASS",
+      "agentStatuses": {
+        "lender-outreach": "COMPLETED",
+        "quote-comparator": "COMPLETED",
+        "term-sheet-builder": "COMPLETED"
+      },
+      "redFlagCount": 0,
+      "dataGapCount": 0,
+      "riskScore": 88,
+      "dataForDownstream": {
+        "bestQuote": {
+          "lender": "Freddie Mac Optigo",
+          "rate": 0.0575,
+          "ltv": 0.70,
+          "loanAmount": 22400000,
+          "term": 10,
+          "amortization": 30,
+          "prepayment": "yield-maintenance",
+          "originationFee": 0.01
+        },
+        "lenderCount": 8,
+        "quotesReceived": 5,
+        "totalCostOfCapital": 0.0612
+      }
+    },
+    "legal": {
+      "status": "COMPLETED",
+      "startedAt": "2024-06-15T12:30:00Z",
+      "completedAt": "2024-06-15T13:45:00Z",
+      "verdict": "PASS",
+      "agentStatuses": {
+        "psa-reviewer": "COMPLETED",
+        "loan-doc-reviewer": "COMPLETED",
+        "title-survey-reviewer": "COMPLETED",
+        "estoppel-tracker": "COMPLETED",
+        "insurance-coordinator": "COMPLETED",
+        "transfer-doc-preparer": "COMPLETED"
+      },
+      "redFlagCount": 0,
+      "dataGapCount": 0,
+      "riskScore": 92,
+      "dataForDownstream": {
+        "psaStatus": "EXECUTED",
+        "titleStatus": "CLEAR",
+        "estoppelReturnRate": 0.88,
+        "insuranceStatus": "BOUND",
+        "loanDocsStatus": "EXECUTED",
+        "transferDocsStatus": "PREPARED"
+      }
+    },
+    "closing": {
+      "status": "COMPLETED",
+      "startedAt": "2024-06-15T13:45:00Z",
+      "completedAt": "2024-06-15T14:30:00Z",
+      "verdict": "GO",
+      "agentStatuses": {
+        "closing-coordinator": "COMPLETED",
+        "funds-flow-manager": "COMPLETED"
+      },
+      "redFlagCount": 0,
+      "dataGapCount": 0,
+      "riskScore": 95,
+      "dataForDownstream": {
+        "readinessVerdict": "GO",
+        "purchasePrice": 32000000,
+        "loanAmount": 22400000,
+        "equityRequired": 10200000,
+        "closingCosts": 600000,
+        "prorations": 45000,
+        "closingDate": "2024-07-15"
+      }
+    }
+  }
+}

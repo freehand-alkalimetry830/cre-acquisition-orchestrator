@@ -1,0 +1,40 @@
+{
+  "$schema": "Agent Checkpoint Template",
+  "$description": "Copy this template for each agent's runtime checkpoint. Stored at data/status/{deal-id}/agents/{agent-name}.json",
+  "agentName": "",
+  "phase": "",
+  "dealId": "",
+  "status": "pending",
+  "statusOptions": ["pending", "running", "complete", "failed", "skipped"],
+  "progress": 0,
+  "startedAt": null,
+  "completedAt": null,
+  "lastUpdatedAt": null,
+  "resumePoint": null,
+  "resumePointDescription": "A string describing where to resume if interrupted mid-task. E.g., 'Completed units 1-50, resume at unit 51'",
+  "inputs": {
+    "$description": "Structured data received from upstream agents or orchestrator",
+    "fromOrchestrator": {},
+    "fromUpstreamAgents": {}
+  },
+  "outputs": {
+    "$description": "Structured data produced by this agent for downstream consumers",
+    "summary": "",
+    "findings": [],
+    "metrics": {},
+    "verdict": null,
+    "verdictOptions": ["PASS", "FAIL", "CONDITIONAL", "NEEDS_REVIEW"]
+  },
+  "dataForDownstream": {
+    "$description": "Specific structured data that dependent agents need. Keys should match what downstream agents expect."
+  },
+  "dataGaps": [],
+  "dataGapFormat": "Array of strings describing data that could not be obtained",
+  "errors": [],
+  "errorFormat": "Array of { message: string, timestamp: string, recoverable: boolean }",
+  "redFlags": [],
+  "redFlagFormat": "Array of { description: string, severity: 'HIGH'|'MEDIUM'|'LOW', category: string }",
+  "childAgents": [],
+  "childAgentFormat": "Array of { agentName: string, status: string, taskId: string }",
+  "logFile": "data/logs/{deal-id}/{phase}.log"
+}

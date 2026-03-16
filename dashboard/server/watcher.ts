@@ -1,0 +1,782 @@
+import { watch } from 'chokidar';
+import { WebSocketServer, WebSocket } from 'ws';
+import { readFileSync, readdirSync, existsSync, mkdirSync, statSync, writeFileSync } from 'fs';
+import { resolve, relative, dirname, join, basename } from 'path';
+import { fileURLToPath } from 'url';
+import { createServer, IncomingMessage, ServerResponse } from 'http';
+import { RunManager, type RunMessage, type StartRunRequest } from './run-manager';
+
+// ---------------------------------------------------------------------------
+// Resolve paths
+// ---------------------------------------------------------------------------
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const customDataPath: string | undefined = process.argv[2];
+const dataRoot: string = customDataPath
+  ? resolve(customDataPath)
+  : resolve(__dirname, '..', '..', 'data');
+const projectRoot: string = resolve(__dirname, '..', '..');
+
+const statusDir: string = join(dataRoot, 'status');
+const logsDir: string = join(dataRoot, 'logs');
+
+// Ensure watched directories exist so chokidar doesn't throw
+for (const dir of [statusDir, logsDir]) {
+  if (!existsSync(dir)) {
+    mkdirSync(dir, { recursive: true });
+    console.log(`[watcher] Created missing directory: ${dir}`);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+interface CheckpointMessage {
+  type: 'checkpoint';
+  path: string;
+  data: unknown;
+}
+
+interface LogMessage {
+  type: 'log';
+  path: string;
+  lines: string[];
+}
+
+interface InitialMessage {
+  type: 'initial';
+  checkpoints: Record<string, unknown>;
+  logs: Record<string, string[]>;
+  events?: Record<string, unknown[]>;
+  documents?: Record<string, unknown>;
+}
+
+interface StoryEventMessage {
+  type: 'event';
+  path: string;
+  event: Record<string, unknown>;
+}
+
+type WatcherMessage = CheckpointMessage | LogMessage | InitialMessage | StoryEventMessage | RunMessage;
+
+const logLineOffsets: Map<string, number> = new Map();
+const eventLineOffsets: Map<string, number> = new Map();
+
+function readJsonSafe(filePath: string): unknown | null {
+  try {
+    const raw: string = readFileSync(filePath, 'utf-8');
+    return JSON.parse(raw);
+  } catch (err) {
+    // Warn, not error: malformed JSON should not crash server or alarm operators
+    console.warn(`[watcher] Skipping malformed JSON: ${filePath}`, (err as Error).message);
+    return null;
+  }
+}
+
+function readLastLines(filePath: string, count: number): string[] {
+  try {
+    const raw: string = readFileSync(filePath, 'utf-8');
+    const lines: string[] = raw.split(/\r?\n/);
+    return lines.slice(-count).filter((l) => l.length > 0);
+  } catch (err) {
+    console.error(`[watcher] Failed to read log file: ${filePath}`, err);
+    return [];
+  }
+}
+
+function readAllLines(filePath: string): string[] {
+  try {
+    const raw: string = readFileSync(filePath, 'utf-8');
+    return raw.split(/\r?\n/).filter((l) => l.length > 0);
+  } catch (err) {
+    console.error(`[watcher] Failed to read log file: ${filePath}`, err);
+    return [];
+  }
+}
+
+function readIncrementalLines(filePath: string): string[] {
+  const lines = readAllLines(filePath);
+  const previousCount = logLineOffsets.get(filePath) ?? 0;
+
+  // File was truncated or rotated, reset offset and replay all lines.
+  if (lines.length < previousCount) {
+    logLineOffsets.set(filePath, lines.length);
+    return lines;
+  }
+
+  if (lines.length === previousCount) {
+    return [];
+  }
+
+  const delta = lines.slice(previousCount);
+  logLineOffsets.set(filePath, lines.length);
+  return delta;
+}
+
+function normalizedRelPath(basePath: string, filePath: string): string {
+  return relative(basePath, filePath).replace(/\\/g, '/');
+}
+
+function isRunArtifactJson(filePathOrRel: string): boolean {
+  const normalized = filePathOrRel.replace(/\\/g, '/');
+  return /\/run-[^/]+-(documents|manifest)\.json$/i.test(`/${normalized}`);
+}
+
+function walkFiles(dir: string, include: (entry: string, fullPath: string) => boolean): string[] {
+  const results: string[] = [];
+  if (!existsSync(dir)) return results;
+  try {
+    const entries = readdirSync(dir);
+    for (const entry of entries) {
+      const fullPath = join(dir, entry);
+      try {
+        const stat = statSync(fullPath);
+        if (stat.isDirectory()) {
+          results.push(...walkFiles(fullPath, include));
+        } else if (include(entry, fullPath)) {
+          results.push(fullPath);
+        }
+      } catch {
+        // Skip entries we can't stat
+      }
+    }
+  } catch {
+    // Skip directories we can't read
+  }
+  return results;
+}
+
+function readNdjsonRawLines(filePath: string): string[] {
+  try {
+    const raw = readFileSync(filePath, 'utf-8');
+    return raw
+      .split(/\r?\n/)
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0);
+  } catch (err) {
+    console.error(`[watcher] Failed to read events file: ${filePath}`, err);
+    return [];
+  }
+}
+
+function parseJsonLine(line: string, filePath: string): Record<string, unknown> | null {
+  try {
+    const value = JSON.parse(line);
+    if (value && typeof value === 'object') {
+      return value as Record<string, unknown>;
+    }
+    return null;
+  } catch (err) {
+    console.warn(`[watcher] Skipping malformed NDJSON line in ${filePath}`, (err as Error).message);
+    return null;
+  }
+}
+
+function readAllEvents(filePath: string): Record<string, unknown>[] {
+  const lines = readNdjsonRawLines(filePath);
+  eventLineOffsets.set(filePath, lines.length);
+  return lines
+    .map((line) => parseJsonLine(line, filePath))
+    .filter((event): event is Record<string, unknown> => event !== null);
+}
+
+function readIncrementalEvents(filePath: string): Record<string, unknown>[] {
+  const lines = readNdjsonRawLines(filePath);
+  const previousCount = eventLineOffsets.get(filePath) ?? 0;
+  if (lines.length < previousCount) {
+    eventLineOffsets.set(filePath, lines.length);
+    return lines
+      .map((line) => parseJsonLine(line, filePath))
+      .filter((event): event is Record<string, unknown> => event !== null);
+  }
+  if (lines.length === previousCount) {
+    return [];
+  }
+  const delta = lines.slice(previousCount);
+  eventLineOffsets.set(filePath, lines.length);
+  return delta
+    .map((line) => parseJsonLine(line, filePath))
+    .filter((event): event is Record<string, unknown> => event !== null);
+}
+
+function findRunArtifactPaths(runId: string): {
+  eventsPath: string | null;
+  documentsPath: string | null;
+  manifestPath: string | null;
+} {
+  const targetEvents = `run-${runId}-events.ndjson`;
+  const targetDocuments = `run-${runId}-documents.json`;
+  const targetManifest = `run-${runId}-manifest.json`;
+  const files = walkFiles(statusDir, () => true);
+  let eventsPath: string | null = null;
+  let documentsPath: string | null = null;
+  let manifestPath: string | null = null;
+
+  for (const filePath of files) {
+    const name = basename(filePath);
+    if (!eventsPath && name === targetEvents) {
+      eventsPath = filePath;
+    } else if (!documentsPath && name === targetDocuments) {
+      documentsPath = filePath;
+    } else if (!manifestPath && name === targetManifest) {
+      manifestPath = filePath;
+    }
+    if (eventsPath && documentsPath && manifestPath) break;
+  }
+
+  return { eventsPath, documentsPath, manifestPath };
+}
+
+function buildInitialRunArtifacts(runId: string | null): {
+  events: Record<string, unknown[]>;
+  documents: Record<string, unknown>;
+} {
+  const events: Record<string, unknown[]> = {};
+  const documents: Record<string, unknown> = {};
+  if (!runId) return { events, documents };
+
+  const artifacts = findRunArtifactPaths(runId);
+  if (artifacts.eventsPath && existsSync(artifacts.eventsPath)) {
+    events[normalizedRelPath(statusDir, artifacts.eventsPath)] = readAllEvents(artifacts.eventsPath);
+  }
+  if (artifacts.documentsPath && existsSync(artifacts.documentsPath)) {
+    const data = readJsonSafe(artifacts.documentsPath);
+    if (data && typeof data === 'object') {
+      documents[normalizedRelPath(statusDir, artifacts.documentsPath)] = data;
+    }
+  }
+  return { events, documents };
+}
+
+/**
+ * Recursively walk a directory and collect all .json file paths.
+ * Supports the nested checkpoint hierarchy:
+ *   data/status/{deal-id}.json               (master checkpoint)
+ *   data/status/{deal-id}/agents/{agent}.json (agent checkpoints)
+ *   data/status/{deal-id}/agents/{agent}/batch-{N}.json (batch checkpoints)
+ */
+function walkJsonFiles(dir: string): string[] {
+  const results: string[] = [];
+  if (!existsSync(dir)) return results;
+  try {
+    const entries = readdirSync(dir);
+    for (const entry of entries) {
+      const fullPath = join(dir, entry);
+      try {
+        const stat = statSync(fullPath);
+        if (stat.isDirectory()) {
+          results.push(...walkJsonFiles(fullPath));
+        } else if (entry.endsWith('.json')) {
+          results.push(fullPath);
+        }
+      } catch {
+        // Skip entries we can't stat
+      }
+    }
+  } catch {
+    // Skip directories we can't read
+  }
+  return results;
+}
+
+function readAllCheckpoints(): Record<string, unknown> {
+  const checkpoints: Record<string, unknown> = {};
+  try {
+    if (!existsSync(statusDir)) return checkpoints;
+    const jsonFiles = walkJsonFiles(statusDir);
+    for (const fullPath of jsonFiles) {
+      const relPath: string = relative(statusDir, fullPath);
+      if (isRunArtifactJson(relPath)) continue;
+      const data: unknown | null = readJsonSafe(fullPath);
+      if (data !== null) {
+        checkpoints[relPath] = data;
+      }
+    }
+  } catch (err) {
+    console.error('[watcher] Failed to read status directory', err);
+  }
+  return checkpoints;
+}
+
+function readAllLogs(): Record<string, string[]> {
+  const logs: Record<string, string[]> = {};
+  try {
+    if (!existsSync(logsDir)) return logs;
+    // Recursively find .log files in subdirectories (e.g., logs/test-deal-001/master.log)
+    const dealDirs: string[] = readdirSync(logsDir);
+    for (const entry of dealDirs) {
+      const entryPath: string = join(logsDir, entry);
+      try {
+        const stat = statSync(entryPath);
+        if (stat.isDirectory()) {
+          const logFiles: string[] = readdirSync(entryPath).filter((f) =>
+            f.endsWith('.log'),
+          );
+          for (const logFile of logFiles) {
+            const fullPath: string = join(entryPath, logFile);
+            const relPath: string = relative(logsDir, fullPath);
+            const lines: string[] = readLastLines(fullPath, 500);
+            logLineOffsets.set(fullPath, readAllLines(fullPath).length);
+            if (lines.length > 0) {
+              logs[relPath] = lines;
+            }
+          }
+        } else if (entry.endsWith('.log')) {
+          const lines: string[] = readLastLines(entryPath, 500);
+          logLineOffsets.set(entryPath, readAllLines(entryPath).length);
+          if (lines.length > 0) {
+            logs[entry] = lines;
+          }
+        }
+      } catch {
+        // Skip entries we can't stat
+      }
+    }
+  } catch (err) {
+    console.error('[watcher] Failed to read logs directory', err);
+  }
+  return logs;
+}
+
+function broadcast(message: WatcherMessage): void {
+  const payload: string = JSON.stringify(message);
+  wss.clients.forEach((client: WebSocket) => {
+    if (client.readyState === WebSocket.OPEN) {
+      try {
+        client.send(payload);
+      } catch (err) {
+        console.error('[watcher] Failed to send to client', err);
+      }
+    }
+  });
+}
+
+const runManager = new RunManager({
+  projectRoot,
+  dataRoot,
+  onEvent: (message: RunMessage) => {
+    broadcast(message);
+  },
+  onReset: () => {
+    logLineOffsets.clear();
+    eventLineOffsets.clear();
+  },
+});
+
+// ---------------------------------------------------------------------------
+// WebSocket server
+// ---------------------------------------------------------------------------
+
+const WS_PORT = 8080;
+const wss: WebSocketServer = new WebSocketServer({ port: WS_PORT });
+
+wss.on('connection', (ws: WebSocket) => {
+  console.log('[watcher] Client connected');
+
+  const runState = runManager.getStatus();
+  const runArtifacts = buildInitialRunArtifacts(runState.runId);
+
+  // Send full current state on connection
+  const initialMessage: InitialMessage = {
+    type: 'initial',
+    checkpoints: readAllCheckpoints(),
+    logs: readAllLogs(),
+    events: runArtifacts.events,
+    documents: runArtifacts.documents,
+  };
+
+  try {
+    ws.send(JSON.stringify(initialMessage));
+    ws.send(JSON.stringify(runManager.getStateMessage()));
+  } catch (err) {
+    console.error('[watcher] Failed to send initial state', err);
+  }
+
+  ws.on('error', (err: Error) => {
+    console.error('[watcher] WebSocket client error', err);
+  });
+
+  ws.on('close', () => {
+    console.log('[watcher] Client disconnected');
+  });
+});
+
+wss.on('error', (err: Error) => {
+  console.error('[watcher] WebSocket server error', err);
+});
+
+console.log(`[watcher] WebSocket server listening on ws://localhost:${WS_PORT}`);
+
+// ---------------------------------------------------------------------------
+// File watchers
+// ---------------------------------------------------------------------------
+
+const statusWatcher = watch(statusDir, {
+  ignoreInitial: true,
+  persistent: true,
+  depth: 3,  // Watch nested agent/batch checkpoint subdirectories
+  awaitWriteFinish: { stabilityThreshold: 300, pollInterval: 100 },
+});
+
+statusWatcher.on('change', (filePath: string) => {
+  const relPath: string = normalizedRelPath(statusDir, filePath);
+  console.log(`[watcher] File changed: status/${relPath}`);
+
+  if (filePath.endsWith('.ndjson')) {
+    const events = readIncrementalEvents(filePath);
+    events.forEach((event) => {
+      broadcast({ type: 'event', path: relPath, event });
+    });
+    return;
+  }
+
+  if (isRunArtifactJson(relPath)) {
+    // Run document/manifest files are served via dedicated API endpoints.
+    return;
+  }
+
+  const data: unknown | null = readJsonSafe(filePath);
+  if (data !== null) {
+    broadcast({ type: 'checkpoint', path: relPath, data });
+  }
+});
+
+statusWatcher.on('add', (filePath: string) => {
+  const relPath: string = normalizedRelPath(statusDir, filePath);
+  console.log(`[watcher] File added: status/${relPath}`);
+
+  if (filePath.endsWith('.ndjson')) {
+    const events = readAllEvents(filePath);
+    events.forEach((event) => {
+      broadcast({ type: 'event', path: relPath, event });
+    });
+    return;
+  }
+
+  if (isRunArtifactJson(relPath)) {
+    return;
+  }
+
+  const data: unknown | null = readJsonSafe(filePath);
+  if (data !== null) {
+    broadcast({ type: 'checkpoint', path: relPath, data });
+  }
+});
+
+statusWatcher.on('error', (err: Error) => {
+  console.error('[watcher] Status watcher error', err);
+});
+
+const logsWatcher = watch(logsDir, {
+  ignoreInitial: true,
+  persistent: true,
+  awaitWriteFinish: { stabilityThreshold: 300, pollInterval: 100 },
+});
+
+logsWatcher.on('change', (filePath: string) => {
+  const relPath: string = normalizedRelPath(logsDir, filePath);
+  console.log(`[watcher] File changed: logs/${relPath}`);
+
+  const lines: string[] = readIncrementalLines(filePath);
+  if (lines.length > 0) {
+    broadcast({ type: 'log', path: relPath, lines });
+  }
+});
+
+logsWatcher.on('add', (filePath: string) => {
+  const relPath: string = normalizedRelPath(logsDir, filePath);
+  console.log(`[watcher] File added: logs/${relPath}`);
+
+  const allLines = readAllLines(filePath);
+  logLineOffsets.set(filePath, allLines.length);
+  if (allLines.length > 0) {
+    broadcast({ type: 'log', path: relPath, lines: allLines });
+  }
+});
+
+logsWatcher.on('error', (err: Error) => {
+  console.error('[watcher] Logs watcher error', err);
+});
+
+console.log(`[watcher] Watching status: ${statusDir}`);
+console.log(`[watcher] Watching logs:   ${logsDir}`);
+console.log('[watcher] Watcher started');
+
+// ---------------------------------------------------------------------------
+// REST API server (Node built-in http)
+// ---------------------------------------------------------------------------
+
+const API_PORT = 8081;
+
+function sendJson(res: ServerResponse, status: number, body: unknown): void {
+  const payload = JSON.stringify(body);
+  res.writeHead(status, {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  });
+  res.end(payload);
+}
+
+function readBody(req: IncomingMessage): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const chunks: Buffer[] = [];
+    req.on('data', (chunk: Buffer) => chunks.push(chunk));
+    req.on('end', () => resolve(Buffer.concat(chunks).toString('utf-8')));
+    req.on('error', reject);
+  });
+}
+
+function parseDealId(url: string): string | null {
+  // Match /api/deal/:id  or /api/deal/:id/pause  or /api/deal/:id/resume
+  const match = url.match(/^\/api\/deal\/([^/]+)/);
+  return match ? match[1] : null;
+}
+
+function parseRunId(url: string, suffix: 'events' | 'documents'): string | null {
+  const match = url.match(new RegExp(`^/api/run/([^/]+)/${suffix}$`));
+  if (!match) return null;
+  try {
+    return decodeURIComponent(match[1]);
+  } catch {
+    return match[1];
+  }
+}
+
+const httpServer = createServer(async (req: IncomingMessage, res: ServerResponse) => {
+  const method = req.method || 'GET';
+  const url = req.url || '/';
+
+  // CORS preflight
+  if (method === 'OPTIONS') {
+    sendJson(res, 204, null);
+    return;
+  }
+
+  try {
+    // POST /api/deal — Create a new deal checkpoint
+    // GET /api/run/status - current run lifecycle status
+    if (method === 'GET' && url === '/api/run/status') {
+      sendJson(res, 200, runManager.getStatus());
+      return;
+    }
+
+    // POST /api/run/start - start a live or fast run
+    if (method === 'POST' && url === '/api/run/start') {
+      const rawBody = await readBody(req);
+      let body: StartRunRequest = {};
+      if (rawBody.trim().length > 0) {
+        try {
+          body = JSON.parse(rawBody) as StartRunRequest;
+        } catch {
+          sendJson(res, 400, { error: 'Invalid JSON body' });
+          return;
+        }
+      }
+      const result = runManager.start(body);
+      sendJson(res, result.statusCode, result.body);
+      return;
+    }
+
+    // POST /api/run/stop - stop active run process
+    if (method === 'POST' && url === '/api/run/stop') {
+      const result = runManager.stop();
+      sendJson(res, result.statusCode, result.body);
+      return;
+    }
+
+    // GET /api/run/:runId/events - fetch all structured events for a run
+    if (method === 'GET' && /^\/api\/run\/[^/]+\/events$/.test(url)) {
+      const runId = parseRunId(url, 'events');
+      if (!runId) {
+        sendJson(res, 400, { error: 'Invalid run ID' });
+        return;
+      }
+      const { eventsPath } = findRunArtifactPaths(runId);
+      if (!eventsPath || !existsSync(eventsPath)) {
+        sendJson(res, 404, { error: `Events not found for run: ${runId}` });
+        return;
+      }
+      const events = readAllEvents(eventsPath);
+      sendJson(res, 200, {
+        runId,
+        path: normalizedRelPath(statusDir, eventsPath),
+        events,
+      });
+      return;
+    }
+
+    // GET /api/run/:runId/documents - fetch all document artifacts for a run
+    if (method === 'GET' && /^\/api\/run\/[^/]+\/documents$/.test(url)) {
+      const runId = parseRunId(url, 'documents');
+      if (!runId) {
+        sendJson(res, 400, { error: 'Invalid run ID' });
+        return;
+      }
+      const { documentsPath } = findRunArtifactPaths(runId);
+      if (!documentsPath || !existsSync(documentsPath)) {
+        sendJson(res, 404, { error: `Documents not found for run: ${runId}` });
+        return;
+      }
+      const payload = readJsonSafe(documentsPath);
+      if (!payload || typeof payload !== 'object') {
+        sendJson(res, 500, { error: `Failed to read documents for run: ${runId}` });
+        return;
+      }
+      sendJson(res, 200, {
+        runId,
+        path: normalizedRelPath(statusDir, documentsPath),
+        ...(payload as Record<string, unknown>),
+      });
+      return;
+    }
+
+    if (method === 'POST' && url === '/api/deal') {
+      const rawBody = await readBody(req);
+      let body: Record<string, unknown>;
+      try {
+        body = JSON.parse(rawBody);
+      } catch {
+        sendJson(res, 400, { error: 'Invalid JSON body' });
+        return;
+      }
+
+      const dealId = body.dealId as string;
+      if (!dealId) {
+        sendJson(res, 400, { error: 'Missing required field: dealId' });
+        return;
+      }
+
+      const checkpointPath = join(statusDir, `${dealId}.json`);
+      const checkpoint = {
+        dealId,
+        dealName: (body.dealName as string) || dealId,
+        property: body.property || {},
+        status: 'pending',
+        overallProgress: 0,
+        startedAt: new Date().toISOString(),
+        lastUpdatedAt: new Date().toISOString(),
+        phases: body.phases || {},
+        resumeInstructions: '',
+        ...body,
+      };
+
+      writeFileSync(checkpointPath, JSON.stringify(checkpoint, null, 2));
+      console.log(`[api] Created deal checkpoint: ${dealId}`);
+      sendJson(res, 201, { dealId, path: checkpointPath, checkpoint });
+      return;
+    }
+
+    // GET /api/deal/:id — Get deal status
+    if (method === 'GET' && /^\/api\/deal\/[^/]+$/.test(url)) {
+      const dealId = parseDealId(url);
+      if (!dealId) {
+        sendJson(res, 400, { error: 'Invalid deal ID' });
+        return;
+      }
+
+      const checkpointPath = join(statusDir, `${dealId}.json`);
+      if (!existsSync(checkpointPath)) {
+        sendJson(res, 404, { error: `Deal not found: ${dealId}` });
+        return;
+      }
+
+      const data = readJsonSafe(checkpointPath);
+      if (data === null) {
+        sendJson(res, 500, { error: `Failed to read checkpoint for: ${dealId}` });
+        return;
+      }
+
+      // Also gather agent-level checkpoints if they exist
+      const agentsDir = join(statusDir, dealId, 'agents');
+      const agentCheckpoints: Record<string, unknown> = {};
+      if (existsSync(agentsDir)) {
+        const agentFiles = walkJsonFiles(agentsDir);
+        for (const agentFile of agentFiles) {
+          const relPath = relative(agentsDir, agentFile);
+          const agentData = readJsonSafe(agentFile);
+          if (agentData !== null) {
+            agentCheckpoints[relPath] = agentData;
+          }
+        }
+      }
+
+      sendJson(res, 200, { deal: data, agents: agentCheckpoints });
+      return;
+    }
+
+    // POST /api/deal/:id/pause — Pause a deal
+    if (method === 'POST' && /^\/api\/deal\/[^/]+\/pause$/.test(url)) {
+      const dealId = parseDealId(url);
+      if (!dealId) {
+        sendJson(res, 400, { error: 'Invalid deal ID' });
+        return;
+      }
+
+      const checkpointPath = join(statusDir, `${dealId}.json`);
+      if (!existsSync(checkpointPath)) {
+        sendJson(res, 404, { error: `Deal not found: ${dealId}` });
+        return;
+      }
+
+      const data = readJsonSafe(checkpointPath) as Record<string, unknown> | null;
+      if (data === null) {
+        sendJson(res, 500, { error: `Failed to read checkpoint for: ${dealId}` });
+        return;
+      }
+
+      data.status = 'paused';
+      data.lastUpdatedAt = new Date().toISOString();
+      data.resumeInstructions = `Deal ${dealId} was paused at ${data.lastUpdatedAt}. Resume by calling POST /api/deal/${dealId}/resume.`;
+
+      writeFileSync(checkpointPath, JSON.stringify(data, null, 2));
+      console.log(`[api] Paused deal: ${dealId}`);
+      sendJson(res, 200, { dealId, status: 'paused', lastUpdatedAt: data.lastUpdatedAt });
+      return;
+    }
+
+    // POST /api/deal/:id/resume — Resume a deal
+    if (method === 'POST' && /^\/api\/deal\/[^/]+\/resume$/.test(url)) {
+      const dealId = parseDealId(url);
+      if (!dealId) {
+        sendJson(res, 400, { error: 'Invalid deal ID' });
+        return;
+      }
+
+      const checkpointPath = join(statusDir, `${dealId}.json`);
+      if (!existsSync(checkpointPath)) {
+        sendJson(res, 404, { error: `Deal not found: ${dealId}` });
+        return;
+      }
+
+      const data = readJsonSafe(checkpointPath) as Record<string, unknown> | null;
+      if (data === null) {
+        sendJson(res, 500, { error: `Failed to read checkpoint for: ${dealId}` });
+        return;
+      }
+
+      data.status = 'running';
+      data.lastUpdatedAt = new Date().toISOString();
+      data.resumeInstructions = `Deal ${dealId} resumed at ${data.lastUpdatedAt}. Check phases for current progress.`;
+
+      writeFileSync(checkpointPath, JSON.stringify(data, null, 2));
+      console.log(`[api] Resumed deal: ${dealId}`);
+      sendJson(res, 200, { dealId, status: 'running', lastUpdatedAt: data.lastUpdatedAt });
+      return;
+    }
+
+    // Fallback: 404
+    sendJson(res, 404, { error: `Not found: ${method} ${url}` });
+  } catch (err) {
+    console.error(`[api] Unhandled error: ${method} ${url}`, err);
+    sendJson(res, 500, { error: 'Internal server error' });
+  }
+});
+
+httpServer.listen(API_PORT, () => {
+  console.log(`[watcher] REST API listening on http://localhost:${API_PORT}`);
+});

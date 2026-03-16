@@ -1,0 +1,30 @@
+{
+  "name": "cre-acquisition-orchestrator",
+  "version": "1.0.0",
+  "description": "Multi-agent AI orchestration framework for commercial real estate acquisitions",
+  "author": "Avi Hacker",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ahacker-1/cre-acquisition-orchestrator.git"
+  },
+  "keywords": [
+    "commercial-real-estate",
+    "ai-agents",
+    "multi-agent-systems",
+    "proptech",
+    "llm-orchestration",
+    "cre",
+    "agent-orchestration"
+  ],
+  "scripts": {
+    "demo": "node scripts/demo-run.js --deal config/deal.json --scenario core-plus --seed 42",
+    "simulate": "node scripts/orchestrate.js --deal config/deal.json --scenario core-plus --seed 42",
+    "dashboard": "cd dashboard && npm install && npm run dev",
+    "validate": "node scripts/validate-contracts.js",
+    "test": "node scripts/system-test.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

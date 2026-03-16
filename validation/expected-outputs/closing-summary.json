@@ -1,0 +1,36 @@
+{
+  "$description": "Expected output structure from Closing phase on test deal",
+  "phaseVerdict": "PASS",
+  "confidence": 90,
+  "expectedAgentCount": 2,
+  "expectedAgents": [
+    "closing-coordinator",
+    "funds-flow-manager"
+  ],
+  "expectedMetrics": {
+    "checklistItemsTotal": { "min": 30, "max": 60, "unit": "count" },
+    "checklistItemsComplete": { "min": 25, "max": 60, "unit": "count" },
+    "outstandingItems": { "min": 0, "max": 10, "unit": "count" },
+    "totalFundsRequired": { "min": 8000000, "max": 14000000, "unit": "dollars" },
+    "closingCosts": { "min": 200000, "max": 600000, "unit": "dollars" },
+    "prorationCredits": { "min": 0, "max": 200000, "unit": "dollars" }
+  },
+  "requiredOutputKeys": [
+    "phaseSummary",
+    "closingReadiness",
+    "outstandingItems",
+    "fundsFlow",
+    "prorations",
+    "phaseVerdict"
+  ],
+  "fundsFlowComponents": [
+    "purchasePrice",
+    "loanProceeds",
+    "equityRequired",
+    "closingCosts",
+    "escrowDeposits",
+    "prorationAdjustments",
+    "reserves",
+    "netWireAmount"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "distressed",
+  "description": "High-deferred-maintenance, title and environmental stress case.",
+  "riskTilt": "high",
+  "assumptions": {
+    "occupancyShift": -0.08,
+    "rentGrowthShift": -0.003,
+    "expenseInflationShift": 0.03,
+    "capRateShiftBps": 80,
+    "lenderSpreadShiftBps": 95,
+    "legalComplexity": "high",
+    "environmentalRisk": "high"
+  },
+  "expectedVerdict": "NO_GO"
+}

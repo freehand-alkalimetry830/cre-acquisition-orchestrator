@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "phases/financing-data.schema.json",
+  "title": "Financing Downstream Data",
+  "type": "object",
+  "required": [
+    "selectedLender",
+    "loanAmount",
+    "ltv",
+    "rate",
+    "lenderComparison",
+    "agentFindings",
+    "riskScore",
+    "redFlagCount",
+    "dataGapCount",
+    "bestQuote"
+  ],
+  "properties": {
+    "selectedLender": { "type": "string" },
+    "selectedLenderFull": { "type": "string" },
+    "loanAmount": { "type": "number" },
+    "ltv": { "type": "number" },
+    "rate": { "type": "number" },
+    "rateType": { "type": "string" },
+    "term": { "type": "number" },
+    "amortization": { "type": "number" },
+    "interestOnlyMonths": { "type": "number" },
+    "annualDebtServiceIO": { "type": "number" },
+    "annualDebtServiceAmort": { "type": "number" },
+    "dscrIO": { "type": "number" },
+    "dscrAmort": { "type": "number" },
+    "dscrCovenant": { "type": "number" },
+    "prepayment": { "type": "string" },
+    "recourse": { "type": "string" },
+    "reserves": { "type": "object" },
+    "quotesReceived": { "type": "number" },
+    "lenderComparison": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "bestQuote": {
+      "type": "object",
+      "required": ["lenderName", "interestRate", "loanAmount"],
+      "properties": {
+        "lenderName": { "type": "string" },
+        "interestRate": { "type": "number" },
+        "loanAmount": { "type": "number" }
+      },
+      "additionalProperties": true
+    },
+    "agentFindings": {
+      "type": "object"
+    },
+    "riskScore": {
+      "type": "number"
+    },
+    "redFlagCount": {
+      "type": "number",
+      "minimum": 0
+    },
+    "dataGapCount": {
+      "type": "number",
+      "minimum": 0
+    }
+  },
+  "additionalProperties": true
+}
