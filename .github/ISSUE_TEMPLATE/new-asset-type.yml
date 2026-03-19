@@ -1,0 +1,65 @@
+name: New Asset Type Proposal
+description: Propose adding support for a new CRE property type
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Want to extend the orchestrator to a new property type? This template helps structure the proposal. See `docs/AGENT-DEVELOPMENT.md` for the agent anatomy standard.
+
+  - type: dropdown
+    id: property-type
+    attributes:
+      label: Property type
+      options:
+        - Industrial / Warehouse
+        - Flex / Industrial
+        - IOS (Improved Outdoor Storage)
+        - Office
+        - Retail / NNN
+        - Land / Development
+        - Mixed-use
+        - Self-storage
+        - Hospitality
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: domain-differences
+    attributes:
+      label: Key domain differences from multifamily
+      description: |
+        What makes this asset type different? Think about: underwriting metrics, DD checklist items, lender criteria, risk factors, lease structures.
+      placeholder: |
+        - Single-tenant NNN instead of rent roll
+        - Clear height, dock doors, column spacing matter for industrial
+        - Different lender appetite (life companies prefer long-term NNN)
+        - Environmental concerns differ (Phase I ESA focus areas)
+    validations:
+      required: true
+
+  - type: textarea
+    id: agents-to-modify
+    attributes:
+      label: Agents that would need modification or replacement
+      description: Which existing agents need changes? Any new agents needed?
+      placeholder: |
+        - rent-roll-analyst -> lease-analyst (single-tenant)
+        - physical-inspection needs industrial-specific checklist
+        - New agent: zoning-compliance (IOS conditional use permits)
+
+  - type: textarea
+    id: skill-files
+    attributes:
+      label: Domain knowledge / skill files needed
+      description: What benchmarks, formulas, or checklists would the new skill files contain?
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      options:
+        - label: I'm willing to contribute the domain knowledge files for this asset type
+        - label: I'm willing to contribute modified agent prompts
+        - label: I'm willing to contribute example deal configurations
