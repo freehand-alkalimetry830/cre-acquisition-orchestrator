@@ -25,6 +25,16 @@ Let's bring this industry into the future.
 
 ---
 
+## What's New in v1.1.0
+
+- **Dashboard New Deal Wizard** - Create, validate, save, and launch deals directly from the dashboard without manually editing `config/deal.json`
+- **Saved Deal Library** - Reopen draft deals, launch ready-to-run deals, and keep sample deals separate from user-created deals
+- **Explicit Deal Launch Paths** - Dashboard launches now target saved deal files instead of assuming a single shared config file
+- **Playwright End-to-End Coverage** - Browser tests now cover draft save, deal relaunch, wizard-based launch, and sample-deal launch flows
+- **Stronger Dashboard Build Gate** - Dashboard build now typechecks both client and server-side TypeScript before bundling
+
+---
+
 ## By the Numbers
 
 | | | | |
@@ -260,6 +270,12 @@ npm run dashboard
 
 The dashboard connects via WebSocket and shows the pipeline executing in real-time across 9 monitoring views.
 
+From the dashboard you can now:
+- create a new deal in the wizard
+- save drafts to the deal library
+- relaunch saved deals without replacing the shared sample config
+- launch shipped sample deals directly from the library
+
 ### Document Ingestion (requires Claude Code CLI)
 
 ```bash
@@ -282,6 +298,14 @@ Edit `config/deal.json` with your deal parameters and run:
 
 ```bash
 npm run simulate
+```
+
+### End-to-End Tests
+
+Run the browser test suite for the dashboard workflow:
+
+```bash
+npm run test:e2e
 ```
 
 ---

@@ -14,6 +14,7 @@ Thanks for your interest in the CRE Acquisition Orchestrator! Contributions are 
    ```bash
    npm run demo
    npm run validate
+   npm run test:e2e
    ```
 
 5. **Submit a PR** — Reference the issue in your pull request description.
